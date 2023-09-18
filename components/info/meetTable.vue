@@ -1,68 +1,46 @@
 <template>
-  <div class="table">
-    <div class="table__filters">
-      <div class="table__filters-title">
-        <h1>Фильтр</h1>
-      </div>
-      <div class="filter">
-        <b-field v-for="filter in MEET_COLUMNS" :key="filter.field">
-          <b-input :placeholder="filter.label"></b-input>
-        </b-field>
-      </div>
-    </div>
-    <div class="table__body">
-      <div class="table__body-title">
-        <h1>Сортировка</h1>
-      </div>
+  <div class="compTable">
+<!--    <div class="meetTable__filters">-->
+<!--      <div class="meetTable__filters-title">-->
+<!--        <h1>Фильтр</h1>-->
+<!--      </div>-->
+<!--      <div class="filter">-->
+<!--        <b-field v-for="filter in MEET_COLUMNS" :key="filter.field">-->
+<!--          <b-input :placeholder="filter.label"></b-input>-->
+<!--        </b-field>-->
+<!--      </div>-->
+<!--    </div>-->
+    <div class="compTable__body">
       <b-table
         :data="MEET_DATA"
-        bordered="isBordered">
+        :bordered="true">
 
         <b-table-column field="status" label="Статус" sortable v-slot="props">
-
-          <b-checkbox :value="!props.row.status"
-                      type="is-success"
-                      v-if="props.row.status">
-            {{ props.row.status ? 'Активно' : 'Завершено' }}
-          </b-checkbox>
-
-          <b-checkbox :value="!props.row.status"
-                      type="is-success"
-                      v-else>
-            {{ props.row.status ? 'Активно' : 'Завершено' }}
-          </b-checkbox>
-
+          <Field :data="props.row.status" :field="'status'" />
         </b-table-column>
 
         <b-table-column field="No" label="№" sortable v-slot="props">
-          {{ props.row.No }}
+          <Field :data="props.row.No" :field="'No'" />
         </b-table-column>
 
         <b-table-column field="name" label="Имя" sortable v-slot="props">
-          {{ props.row.name }}
+          <Field :data="props.row.name" :field="'name'" />
         </b-table-column>
 
         <b-table-column field="phone" label="Телефон" sortable v-slot="props">
-          <a :href="'tel: ' + props.row.phone">{{ props.row.phone }}</a>
+          <Field :data="props.row.phone" :field="'phone'" />
         </b-table-column>
 
-        <b-table-column field="date" label="Дата" sortable v-slot="props">
-          <span class="tag is-success">
-            {{ props.row.time }}
-          </span>
-          -
-          <span class="tag is-success">
-            {{ new Date(props.row.date).toLocaleDateString() }}
-          </span>
+        <b-table-column field="datetime" label="Дата" sortable v-slot="props">
+          <Field :data="props.row.datetime" :field="'datetime'" />
         </b-table-column>
 
         <b-table-column field="details" label="Детали" sortable v-slot="props">
-          {{ props.row.details }}
+          <Field :data="props.row.details" :field="'details'" />
         </b-table-column>
 
         <b-table-column field="delete" sortable v-slot="props">
-          <b-button type="is-danger"
-                    icon-right="delete" />
+          <Field :data="props.row" :field="'delete'" />
         </b-table-column>
 
       </b-table>
@@ -71,8 +49,11 @@
 </template>
 
 <script>
+import Field from "~/components/info/Field.vue";
+
 export default {
   name: "meetTable",
+  components: {Field},
   computed: {
     MEET_DATA() {
       return this.$store.getters["info/MEET_DATA"]

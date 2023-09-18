@@ -1,6 +1,6 @@
 <template>
   <div class="meets">
-    <div class="table">
+    <div class="table w-full">
       <meet-table />
     </div>
   </div>

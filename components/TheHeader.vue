@@ -42,8 +42,12 @@
         </template>
 
         <template #end>
-          <div class="currency">12$ - </div>
-          <div class="date">12.12.23Y</div>
+          <div class="date">
+            <b-button type="is-success">Курсы валют</b-button>
+          </div>
+          <div class="date">
+            <b-button type="is-dark">{{ new Date().toLocaleDateString() }}</b-button>
+          </div>
         </template>
       </b-navbar>
     </nav>
