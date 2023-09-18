@@ -1,7 +1,7 @@
 <template>
   <div class="compTable">
-<!--    <div class="meetTable__filters">-->
-<!--      <div class="meetTable__filters-title">-->
+<!--    <div class="compTable__filters">-->
+<!--      <div class="compTable__filters-title">-->
 <!--        <h1>Фильтр</h1>-->
 <!--      </div>-->
 <!--      <div class="filter">-->
@@ -19,8 +19,8 @@
           <Field :data="props.row.status" :field="'status'" />
         </b-table-column>
 
-        <b-table-column field="No" label="№" sortable v-slot="props">
-          <Field :data="props.row.No" :field="'No'" />
+        <b-table-column field="no" label="№" sortable v-slot="props">
+          <Field :data="props.row.no" :field="'no'" />
         </b-table-column>
 
         <b-table-column field="name" label="Имя" sortable v-slot="props">

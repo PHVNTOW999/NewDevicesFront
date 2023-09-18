@@ -1,17 +1,19 @@
 <template>
   <div class="meets">
     <div class="table w-full">
-      <meet-table />
+      <Form />
+      <meet-table class="mt-10" />
     </div>
   </div>
 </template>
 
 <script>
 import MeetTable from "~/components/info/meetTable.vue";
+import Form from "~/components/info/Form.vue";
 
 export default {
   name: "index",
-  components: {MeetTable}
+  components: {Form, MeetTable}
 }
 </script>
 

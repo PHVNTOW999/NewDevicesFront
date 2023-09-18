@@ -1,10 +1,10 @@
 export const state = () => ({
   meetData: [
-    { 'No': 1, 'status': false, 'name': 'Jesse', 'phone': '+57', 'datetime': { 'time': null, 'data': '2016-12-06 14:38:38' }, 'details': 'bjkkbjbkj' },
-    { 'No': 2, 'status': true, 'name': 'John', 'phone': '+575757', 'datetime': { 'time': '12:02', 'data': null }, 'details': 'Male' },
-    { 'No': 3, 'status': false, 'name': 'Tina', 'phone': '+958758', 'datetime': { 'time': '12:02', 'data': '2016-12-06' }, 'details': 'Female' },
-    { 'No': 4, 'status': false, 'name': 'Clarence', 'phone': '+578875587', 'datetime': { 'time': '12:02', 'data': '2016-12-06' }, 'details': 'Male' },
-    { 'No': 5, 'status': false, 'name': 'Anne', 'phone': '+578875', 'datetime': { 'time': '12:02', 'data': '2016-12-06' }, 'details': 'Female' }
+    { 'no': 1, 'status': false, 'name': 'Jesse', 'phone': +57, 'datetime': { 'time': '', 'data': '2016-12-06 14:38:38' }, 'details': 'bjkkbjbkj' },
+    { 'no': 2, 'status': true, 'name': 'John', 'phone': +575757, 'datetime': { 'time': '12:02', 'data': null }, 'details': 'Male' },
+    { 'no': 3, 'status': false, 'name': 'Tina', 'phone': +958758, 'datetime': { 'time': '12:02', 'data': '2016-12-06' }, 'details': 'Female' },
+    { 'no': 4, 'status': false, 'name': 'Clarence', 'phone': +578875587, 'datetime': { 'time': '12:02', 'data': '2016-12-06' }, 'details': 'Male' },
+    { 'no': 5, 'status': false, 'name': 'Anne', 'phone': +578875, 'datetime': { 'time': '12:02', 'data': '2016-12-06' }, 'details': 'Female' }
   ],
   meetColumns: [
     {
@@ -17,7 +17,7 @@ export const state = () => ({
     },
     {
       id: 2,
-      field: 'No',
+      field: 'no',
       label: '№',
       width: '100',
       centered: true,
@@ -57,7 +57,7 @@ export const state = () => ({
     {
       id: 7,
       field: 'delete',
-      label: 'Удалить',
+      label: '',
       centered: true,
       input: 'button'
     }
