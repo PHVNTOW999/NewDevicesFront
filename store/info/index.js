@@ -1,82 +1,48 @@
 export const state = () => ({
-  meetData: [
-    { 'no': 1, 'status': false, 'name': 'Jesse', 'phone': +57, 'datetime': { 'time': '', 'data': '2016-12-06 14:38:38' }, 'details': 'bjkkbjbkj' },
-    { 'no': 2, 'status': true, 'name': 'John', 'phone': +575757, 'datetime': { 'time': '12:02', 'data': null }, 'details': 'Male' },
-    { 'no': 3, 'status': false, 'name': 'Tina', 'phone': +958758, 'datetime': { 'time': '12:02', 'data': '2016-12-06' }, 'details': 'Female' },
-    { 'no': 4, 'status': false, 'name': 'Clarence', 'phone': +578875587, 'datetime': { 'time': '12:02', 'data': '2016-12-06' }, 'details': 'Male' },
-    { 'no': 5, 'status': false, 'name': 'Anne', 'phone': +578875, 'datetime': { 'time': '12:02', 'data': '2016-12-06' }, 'details': 'Female' }
-  ],
-  meetColumns: [
-    {
-      id: 1,
-      field: 'status',
-      label: 'Статус',
-      centered: true,
-      searchable: true,
-      input: 'checkbox'
-    },
-    {
-      id: 2,
-      field: 'no',
-      label: '№',
-      width: '100',
-      centered: true,
-      searchable: true,
-      input: 'number'
-    },
-    {
-      id: 3,
-      field: 'name',
-      label: 'Имя',
-      centered: true,
-      searchable: true,
-      input: 'text'
-    },
-    {
-      id: 4,
-      field: 'phone',
-      label: 'Телефон',
-      centered: true,
-      searchable: true,
-      input: 'number'
-    },
-    {
-      id: 5,
-      field: 'date',
-      label: 'Дата',
-      centered: true,
-      input: 'datetime'
-    },
-    {
-      id: 6,
-      field: 'details',
-      label: 'Детали',
-      centered: true,
-      input: 'text'
-    },
-    {
-      id: 7,
-      field: 'delete',
-      label: '',
-      centered: true,
-      input: 'button'
-    }
-  ]
+  meets: null,
 })
 
 export const getters = {
-  MEET_DATA(state) {
-    return state.meetData
+  MEETS(state) {
+    return state.meets
   },
-  MEET_COLUMNS(state) {
-    return state.meetColumns
-  }
 }
 
 export const mutations = {
-
+  SET_MEETS(state, payload) {
+    state.meets = payload
+  },
 }
 
 export const actions = {
-
+  GET_MEETS({ commit }) {
+    return new Promise((res, rej) => {
+      this.$axios.$get(`/api/meetlist/`).then((data) => {
+        commit('SET_MEETS', data)
+        res(data)
+      }).catch((error) => { rej(console.error(error)) })
+    })
+  },
+  POST_MEET({ commit }, payload) {
+    return new Promise((res, rej) => {
+      console.log(payload)
+      this.$axios.$post(`/api/meetlist/`, payload).then((data) => {
+        res(data)
+      }).catch((error) => { rej(console.error(error)) })
+    })
+  },
+  PUT_MEET({ commit }, payload) {
+    return new Promise((res, rej) => {
+      this.$axios.$put(`/api/meet/${payload.uuid}/`, payload.field).then((data) => {
+        res(data)
+      }).catch((error) => { rej(console.error(error)) })
+    })
+  },
+  DEL_MEET({ commit }, payload) {
+    return new Promise((res, rej) => {
+      this.$axios.$delete(`/api/meet/${payload}/`).then((data) => {
+        res(data)
+      }).catch((error) => { rej(console.error(error)) })
+    })
+  },
 }

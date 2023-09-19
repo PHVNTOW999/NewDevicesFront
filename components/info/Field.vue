@@ -2,17 +2,10 @@
   <div class="customInput">
     <b-field>
 
-      <div v-if="field === 'status'" >
-        <b-checkbox :value="!pole"
-                    type="is-success"
-                    v-if="pole">
-          {{ pole ? 'Активно' : 'Завершено' }}
-        </b-checkbox>
-
-        <b-checkbox :value="!pole"
-                    type="is-success"
-                    v-else>
-          {{ pole ? 'Активно' : 'Завершено' }}
+      <div v-if="field === 'status'" @click="update()">
+        <b-checkbox v-model="pole"
+                    type="is-success">
+          <span>{{ !pole ? 'Завершено' : 'Активно' }}</span>
         </b-checkbox>
       </div>
 
@@ -20,24 +13,22 @@
         <b-input v-model="pole" type="number" />
       </div>
 
-      <div v-if="field === 'name'" >
+      <div v-if="field === 'name'">
         <b-input v-model="pole" />
       </div>
 
-      <div v-if="field === 'phone'" >
+      <div class="flex" v-if="field === 'phone'" >
         <b-input v-model="pole" type="tel" />
-        <div class="block text-center">
+        <div class="block text-center pt-1">
           <a :href="'tel: ' + pole">
-            <b-button type="is-success" is-light>Позвонить</b-button>
+            <b-button type="is-success" size="is-small" is-light>Позвонить</b-button>
           </a>
         </div>
       </div>
 
       <div v-if="field === 'datetime'" >
-        <div class="flex w-52">
-          <input type="time" v-model="pole.time">
-          <span> | </span>
-          <input type="date" v-model="pole.data">
+        <div class="flex">
+          <input type="datetime-local" v-model="pole">
         </div>
       </div>
 
@@ -47,7 +38,8 @@
 
       <div v-if="field === 'delete'" >
         <b-button type="is-danger"
-                  icon-right="delete" />
+                  icon-right="delete"
+                  @click="del" />
       </div>
 
     </b-field>
@@ -58,21 +50,65 @@
 
 export default {
   name: "customInput",
-  props: ['data', 'field'],
+  props: ['uuid', 'data', 'field'],
   data() {
     return {
-      pole: {
-        time: null,
-        date: null,
-      },
+      pole: null
+    }
+  },
+  methods: {
+    async update() {
+      const loadingComponent = this.$buefy.loading.open()
+
+      const form = {}
+      form['uuid'] = this.uuid
+      form['field'] = {}
+      form.field[this.field] = this.pole
+
+      try {
+        await this.$store.dispatch('info/PUT_MEET', form)
+        this.$buefy.notification.open({
+          message: 'Сохранено',
+          type: 'is-success'
+        })
+      } catch(e) {
+        this.$buefy.notification.open({
+          message: `Ошибка: ${e}`,
+          type: 'is-danger',
+        })
+      } finally {
+        loadingComponent.close()
+      }
+    },
+    async del() {
+      const loadingComponent = this.$buefy.loading.open()
+      try {
+        await this.$store.dispatch('info/DEL_MEET', this.uuid)
+        // this.$buefy.notification.open({
+        //   message: 'Удалено',
+        //   type: 'is-success'
+        // })
+      } catch(e) {
+        this.$buefy.notification.open({
+          message: `Ошибка: ${e}`,
+          type: 'is-danger',
+        })
+      } finally {
+        setTimeout(() => {
+          this.$store.dispatch('info/GET_MEETS')
+          this.$router.go()
+        }, 100)
+        loadingComponent.close()
+      }
+    }
+  },
+  watch: {
+    pole() {
+      if(this.pole !== null && this.pole !== this.data) this.update()
     }
   },
   created() {
     this.pole = this.data
-    if(this.field === 'datetime') {
-      this.pole.time = this.data.time
-      this.pole.date = this.data.date
-    }
   }
 }
 </script>

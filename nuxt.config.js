@@ -1,9 +1,12 @@
+// Local api
+const api = 'http://127.0.0.1:8000/'
+// Server api
+// const api = 'http://188.94.156.116:10000/'
+
 export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
+  target: 'server',
   ssr: false,
-
-  // Target: https://go.nuxtjs.dev/config-target
-  target: 'static',
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -38,14 +41,20 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/buefy
     'nuxt-buefy',
-    // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
   ],
 
-  // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-    baseURL: '/'
+    proxy: true
+  },
+
+  proxy: {
+    '/api/': { target: api }
+  },
+
+  server: {
+    host: '127.0.0.1',
+    port: 3000
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
