@@ -43,7 +43,9 @@
 
         <template #end>
           <div class="date">
-            <b-button type="is-success">Курсы валют</b-button>
+            <router-link to="/">
+              <b-button type="is-success">Курсы валют</b-button>
+            </router-link>
           </div>
           <div class="date">
             <b-button type="is-dark">{{ new Date().toLocaleDateString() }}</b-button>

@@ -1,22 +1,15 @@
 <template>
-  <div class="table">
-<!--    <div class="compTable__filters">-->
-<!--      <div class="compTable__filters-title">-->
-<!--        <h1>Фильтр</h1>-->
-<!--      </div>-->
-<!--      <div class="filter">-->
-<!--        <b-field v-for="filter in MEET_COLUMNS" :key="filter.field">-->
-<!--          <b-input :placeholder="filter.label"></b-input>-->
-<!--        </b-field>-->
-<!--      </div>-->
-<!--    </div>-->
-    <div class="tableable__body" v-if="MEET_DATA">
+  <div class="table w-full">
+    <div class="table__title">
+      <h1 class="m-5 text-4xl text-center">Данные</h1>
+    </div>
+    <div class="table__body" v-if="MEET_DATA">
       <b-table
         :data="MEET_DATA"
         :bordered="true">
 
-        <b-table-column field="status" label="Статус" v-slot="props">
-          <Field :data="props.row.status" :field="'status'" :uuid="props.row.uuid" />
+        <b-table-column field="isActive" label="Статус" v-slot="props">
+          <Field :data="props.row.isActive" :field="'isActive'" :uuid="props.row.uuid" />
         </b-table-column>
 
         <b-table-column field="no" label="№" v-slot="props">

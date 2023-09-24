@@ -19,26 +19,7 @@
 
     <b-field label="Дата">
       <div class="flex w-full">
-<!--        <input type="datetime-local" v-model="form.datetime">-->
-        <b-datetimepicker class="w-full" v-model="form.datetime">
-
-          <template #left>
-            <b-button
-              label="Сегодня"
-              type="is-primary"
-              icon-left="clock"
-              @click="form.datetime = new Date()" />
-          </template>
-
-          <template #right>
-            <b-button
-              label="Удалить"
-              type="is-danger"
-              icon-left="close"
-              outlined
-              @click="form.datetime = null" />
-          </template>
-        </b-datetimepicker>
+        <input class="w-full" type="datetime-local" v-model="form.datetime">
       </div>
     </b-field>
 
@@ -52,6 +33,7 @@
 </template>
 
 <script>
+
 export default {
   name: "Form",
   data() {
@@ -61,7 +43,7 @@ export default {
         no: null,
         name: null,
         phone: null,
-        datetime: new Date().toLocaleDateString(),
+        datetime: new Date(),
         details: null,
       },
     }
@@ -71,10 +53,6 @@ export default {
       const loadingComponent = this.$buefy.loading.open()
       try {
         await this.$store.dispatch('info/POST_MEET', this.form)
-        // this.$buefy.notification.open({
-        //   message: 'Добавлено',
-        //   type: 'is-success'
-        // })
       } catch(e) {
         this.$buefy.notification.open({
           message: `Ошибка: ${e}`,
@@ -85,11 +63,6 @@ export default {
         loadingComponent.close()
       }
     },
-  },
-  watch: {
-    // 'form.datetime'() {
-    //   this.form.datetime = new Date().toLocaleDateString()
-    // }
   },
   computed: {
     MEET_DATA() {
