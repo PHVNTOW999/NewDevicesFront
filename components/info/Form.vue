@@ -52,7 +52,7 @@ export default {
     async post() {
       const loadingComponent = this.$buefy.loading.open()
       try {
-        await this.$store.dispatch('info/POST_MEET', this.form)
+        await this.$store.dispatch('info/POST__MEET', this.form)
       } catch(e) {
         this.$buefy.notification.open({
           message: `Ошибка: ${e}`,

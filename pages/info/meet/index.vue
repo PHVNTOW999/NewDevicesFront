@@ -23,7 +23,7 @@ export default {
     async GET_DATA() {
       const loadingComponent = this.$buefy.loading.open()
       try {
-        await this.$store.dispatch('info/GET_MEETS')
+        await this.$store.dispatch('info/GET__MEETS')
       } catch(e) {
         this.$buefy.notification.open({
           message: `Error: ${e}`,
@@ -31,7 +31,7 @@ export default {
         })
       } finally {
         setTimeout(() => {
-          this.$store.dispatch('info/GET_MEETS')
+          this.$store.dispatch('info/GET__MEETS')
         }, 100)
         loadingComponent.close()
       }

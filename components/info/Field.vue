@@ -121,8 +121,8 @@ export default {
       form.field[this.field] = this.pole
 
       try {
-        if (this.field === 'datetime' && this.pole === "") await this.$store.dispatch('info/PATCH_MEET_DATETIME', form)
-        else await this.$store.dispatch('info/PUT_MEET', form)
+        if (this.field === 'datetime' && this.pole === "") await this.$store.dispatch('info/PATCH__MEET__DATETIME', form)
+        else await this.$store.dispatch('info/PUT__MEET', form)
         this.$buefy.notification.open({
           message: 'Сохранено',
           type: 'is-success'
@@ -139,7 +139,7 @@ export default {
     async del() {
       const loadingComponent = this.$buefy.loading.open()
       try {
-        await this.$store.dispatch('info/DEL_MEET', this.uuid)
+        await this.$store.dispatch('info/DEL__MEET', this.uuid)
       } catch(e) {
         this.$buefy.notification.open({
           message: `Ошибка: ${e}`,

@@ -3,7 +3,7 @@
     <div class="table__filters-title">
       <h1 class="m-5 text-4xl text-center">Фильтр</h1>
     </div>
-    <div class="filter grid grid-cols-[0.5fr_1fr_1fr_1fr_1fr_1fr]">
+    <div class="filter grid grid-cols-[0.5fr_1fr_1fr_1fr_1fr_1fr_1fr]">
 
       <b-field label="Статус">
         <b-checkbox v-model="filter.isActive"
@@ -25,11 +25,20 @@
       </b-field>
 
       <b-field label="Дата">
+<!--        <input type="datetime-local" v-model="filter.datetime">-->
         <b-input class="w-full" v-model="filter.datetime" />
       </b-field>
 
       <b-field label="Детали">
         <b-input class="w-full" v-model="filter.details" type="details" />
+      </b-field>
+
+      <b-field>
+        <b-tooltip label="Сбросить" position="is-left">
+          <b-button type="is-danger"
+                    icon-right="delete"
+                    @click="$store.commit('info/DEL__FILTER')" />
+        </b-tooltip>
       </b-field>
 
     </div>
@@ -52,9 +61,11 @@ export default {
     }
   },
   watch: {
-    'filter.isActive'() {
-      return this.$store.commit('info/SET_FILTER', this.filter)
-      // return this.$store.getters["info/SET_FILTER"]
+    filter: {
+      handler() {
+        return this.$store.commit('info/SET__FILTER', this.filter)
+      },
+      deep: true
     }
   }
 }
