@@ -12,6 +12,7 @@ export const getters = {
 export const mutations = {
   SET__MEETS(state, payload) {
     state.meets = payload
+    state.filteredMeets = payload
   },
   SET__FILTER(state, payload) {
     // let mass = state.meets
