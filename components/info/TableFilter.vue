@@ -6,38 +6,38 @@
     <div class="filter grid grid-cols-[0.5fr_1fr_1fr_1fr_1fr_1fr_1fr]">
 
       <b-field label="Статус">
-        <b-checkbox v-model="filter.isActive"
+        <b-checkbox v-model="filters.isActive"
                     type="is-success">
-          <span>{{ !filter.isActive ? 'Завершено' : 'Активно' }}</span>
+          <span>{{ !filters.isActive ? 'Завершено' : 'Активно' }}</span>
         </b-checkbox>
       </b-field>
 
       <b-field label="№">
-        <b-input class="w-full" v-model="filter.no" type="number" />
+        <b-input class="w-full" v-model="filters.no" type="number" />
       </b-field>
 
       <b-field label="Имя">
-        <b-input class="w-full" v-model="filter.name" />
+        <b-input class="w-full" v-model="filters.name" />
       </b-field>
 
       <b-field label="Телефон">
-        <b-input class="w-full" v-model="filter.phone" />
+        <b-input class="w-full" v-model="filters.phone" />
       </b-field>
 
       <b-field label="Дата">
 <!--        <input type="datetime-local" v-model="filter.datetime">-->
-        <b-input class="w-full" v-model="filter.datetime" />
+        <b-input class="w-full" v-model="filters.datetime" />
       </b-field>
 
       <b-field label="Детали">
-        <b-input class="w-full" v-model="filter.details" type="details" />
+        <b-input class="w-full" v-model="filters.details" type="details" />
       </b-field>
 
-      <b-field>
+      <b-field class="mt-8">
         <b-tooltip label="Сбросить" position="is-left">
           <b-button type="is-danger"
                     icon-right="delete"
-                    @click="$store.commit('info/DEL__FILTER')" />
+                    @click="DEL__FILTERS" />
         </b-tooltip>
       </b-field>
 
@@ -50,7 +50,7 @@ export default {
   name: "TableFilter",
   data() {
     return {
-      filter: {
+      filters: {
         isActive: null,
         no: null,
         name: null,
@@ -60,10 +60,25 @@ export default {
       }
     }
   },
+  methods: {
+    DEL__FILTERS() {
+      this.filters = {
+        isActive: null,
+        no: null,
+        name: null,
+        phone: null,
+        datetime: null,
+        details: null,
+      }
+      setTimeout(() => {
+        this.$store.commit('info/DEL__FILTERS')
+      }, 100)
+    }
+  },
   watch: {
-    filter: {
+    filters: {
       handler() {
-        return this.$store.commit('info/SET__FILTER', this.filter)
+        return this.$store.commit('info/SET__FILTERS', this.filters)
       },
       deep: true
     }

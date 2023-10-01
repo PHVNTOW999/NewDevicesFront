@@ -1,35 +1,41 @@
 export const state = () => ({
   meets: null,
-  filteredMeets: null,
+  filtersMeets: null,
 })
 
 export const getters = {
   MEETS(state) {
     return state.meets
   },
+  FILTERS__MEETS(state) {
+    return state.filtersMeets
+  },
 }
 
 export const mutations = {
   SET__MEETS(state, payload) {
     state.meets = payload
-    state.filteredMeets = payload
+    state.filtersMeets = payload
   },
-  SET__FILTER(state, payload) {
-    // let mass = state.meets
-    let newFilter = []
+  SET__FILTERS(state, payload) {
+    const copyFilter = Object.entries(payload)
+    const copyArr = state.meets
+    let res = []
 
-    Object.keys(payload).forEach((filter) => {
-      if(payload[filter] !== null || undefined) {
-        this.newFilter = state.meets.filter((el) => {
-          console.log(payload[filter], typeof(payload[filter]))
-          return el[filter] == payload[filter]
+    for (const [key, val] of copyFilter) {
+      if(val !== null && val !== '') {
+        copyArr.forEach(el => {
+          const check = res.find((obj) => {
+            return obj.uuid == el.uuid
+          })
+          if(String(el[key]).includes(val) && !check) res.push(el)
         })
       }
-    })
-    state.filteredMeets = this.newFilter
+    }
+    state.filtersMeets = res
   },
-  DEL__FILTER(state) {
-    state.filteredMeets = state.meets
+  DEL__FILTERS(state) {
+    state.filtersMeets = state.meets
   }
 }
 

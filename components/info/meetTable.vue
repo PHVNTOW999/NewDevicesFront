@@ -3,9 +3,10 @@
     <div class="table__title">
       <h1 class="m-5 text-4xl text-center">Данные</h1>
     </div>
-    <div class="table__body" v-if="MEET_DATA">
+    <div class="table__body" v-if="DATA">
       <b-table
-        :data="MEET_DATA"
+        :key="tableKey"
+        :data="DATA"
         :bordered="true">
 
         <b-table-column field="isActive" label="Статус" v-slot="props">
@@ -46,11 +47,17 @@ import Field from "~/components/info/Field.vue";
 
 export default {
   name: "meetTable",
+  data() { return { tableKey: 0 } },
   components: {Field},
   computed: {
-    MEET_DATA() {
-      return this.$store.getters["info/MEETS"]
+    DATA() {
+      return this.$store.getters["info/FILTERS__MEETS"]
     },
+  },
+  watch: {
+    DATA() {
+      return this.tableKey += 1
+    }
   }
 }
 </script>
