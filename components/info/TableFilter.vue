@@ -3,7 +3,7 @@
     <div class="table__filters-title">
       <h1 class="m-5 text-4xl text-center">Фильтр</h1>
     </div>
-    <div class="filter grid grid-cols-[0.5fr_1fr_1fr_1fr_1fr_1fr_1fr]">
+    <div class="filter grid grid-cols-[0.5fr_1fr_1fr_1fr_1fr_1fr_0.1fr]">
 
       <b-field label="Статус">
         <b-checkbox v-model="filters.isActive"

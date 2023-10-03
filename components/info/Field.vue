@@ -57,9 +57,10 @@
               size="is-medium" />
           </div>
         </b-tooltip>
-        <div class="flex">
-          <input type="datetime-local" v-model="pole">
-        </div>
+        <b-input v-model="pole" />
+<!--        <div class="flex">-->
+<!--          <input type="datetime-local" v-model="pole">-->
+<!--        </div>-->
       </div>
 
       <div class="flex justify-between" v-if="field === 'details'">
@@ -121,8 +122,9 @@ export default {
       form.field[this.field] = this.pole
 
       try {
-        if (this.field === 'datetime' && this.pole === "") await this.$store.dispatch('info/PATCH__MEET__DATETIME', form)
-        else await this.$store.dispatch('info/PUT__MEET', form)
+        // if (this.field === 'datetime' && this.pole === "") await this.$store.dispatch('info/PATCH__MEET__DATETIME', form)
+        // else
+        await this.$store.dispatch('info/PUT__MEET', form)
         this.$buefy.notification.open({
           message: 'Сохранено',
           type: 'is-success'

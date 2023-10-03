@@ -19,7 +19,7 @@
 
     <b-field label="Дата">
       <div class="flex w-full">
-        <input class="w-full" type="datetime-local" v-model="form.datetime">
+        <b-input class="w-full" v-model="form.datetime" />
       </div>
     </b-field>
 

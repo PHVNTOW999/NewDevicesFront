@@ -7,13 +7,14 @@
       <b-table
         :key="tableKey"
         :data="DATA"
-        :bordered="true">
+        :bordered="true"
+        ref="table">
 
-        <b-table-column field="isActive" label="Статус" v-slot="props">
+        <b-table-column field="isActive" label="Статус" v-slot="props" sortable centered>
           <Field :data="props.row.isActive" :field="'isActive'" :uuid="props.row.uuid" />
         </b-table-column>
 
-        <b-table-column field="no" label="№" v-slot="props">
+        <b-table-column field="no" label="№" v-slot="props" centered>
           <Field :data="props.row.no" :field="'no'" :uuid="props.row.uuid" />
         </b-table-column>
 
@@ -56,6 +57,9 @@ export default {
   },
   watch: {
     DATA() {
+      return this.tableKey += 1
+    },
+    '$refs.table'() {
       return this.tableKey += 1
     }
   }

@@ -62,13 +62,13 @@ export const actions = {
       }).catch((error) => { rej(console.error(error)) })
     })
   },
-  PATCH__MEET__DATETIME({ commit }, payload) {
-    return new Promise((res, rej) => {
-      this.$axios.$patch(`/api/info/meet/${payload.uuid}/`, payload.field).then((data) => {
-        res(data)
-      }).catch((error) => { rej(console.error(error)) })
-    })
-  },
+  // PATCH__MEET__DATETIME({ commit }, payload) {
+  //   return new Promise((res, rej) => {
+  //     this.$axios.$patch(`/api/info/meet/${payload.uuid}/`, payload.field).then((data) => {
+  //       res(data)
+  //     }).catch((error) => { rej(console.error(error)) })
+  //   })
+  // },
   DEL__MEET({ commit }, payload) {
     return new Promise((res, rej) => {
       this.$axios.$delete(`/api/info/meet/${payload}/`).then((data) => {
