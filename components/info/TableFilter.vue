@@ -25,7 +25,6 @@
       </b-field>
 
       <b-field label="Дата">
-<!--        <input type="datetime-local" v-model="filter.datetime">-->
         <b-input class="w-full" v-model="filters.datetime" />
       </b-field>
 
