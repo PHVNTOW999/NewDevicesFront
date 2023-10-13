@@ -42,7 +42,28 @@ export default {
     // https://go.nuxtjs.dev/buefy
     'nuxt-buefy',
     '@nuxtjs/axios',
+    '@nuxtjs/i18n'
   ],
+
+  i18n: {
+    lazy: true,
+    legacy: false,
+    langDir: "locales",
+    strategy: "prefix_except_default",
+    locales: [
+      {
+        code: 'en',
+        name: 'English',
+        file: 'en.json'
+      },
+      {
+        code: 'ru',
+        name: 'Русский',
+        file: 'ru.json'
+      }
+    ]
+    // defaultLocale: 'en'
+  },
 
   axios: {
     proxy: true

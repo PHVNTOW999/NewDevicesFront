@@ -3,6 +3,7 @@
     <div class="currencies">
       <h1 class="currencies__title">Курс Валют</h1>
       {{ CURR }}
+      <p>{{ $t("test") }}</p>
     </div>
   </div>
 </template>
