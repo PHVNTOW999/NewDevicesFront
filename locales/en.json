@@ -1,3 +1,6 @@
 {
+  "header": {
+    "exchange_rates": "Exchange rates"
+  },
   "test": "Hello"
 }

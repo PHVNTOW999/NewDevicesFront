@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import MeetTable from "~/components/info/meetTable.vue";
+import MeetTable from "~/components/info/table.vue";
 import Form from "~/components/info/Form.vue";
 import TableFilter from "~/components/info/TableFilter.vue";
 

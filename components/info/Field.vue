@@ -58,9 +58,6 @@
           </div>
         </b-tooltip>
         <b-input v-model="pole" />
-<!--        <div class="flex">-->
-<!--          <input type="datetime-local" v-model="pole">-->
-<!--        </div>-->
       </div>
 
       <div class="flex justify-between" v-if="field === 'details'">

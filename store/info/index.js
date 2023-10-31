@@ -1,6 +1,22 @@
 export const state = () => ({
   meets: null,
+  meetsFields: [
+    { field: 'isActive', label: 'Status'},
+    { field: 'no', label: '№', type: 'number'},
+    { field: 'name', label: 'Name'},
+    { field: 'phone', label: 'Phone'},
+    { field: 'datetime', label: 'Date'},
+    { field: 'details', label: 'Details'},
+  ],
+
   filtersMeets: null,
+  meetsFormFields: [
+    { field: 'no', label: '№', type: 'number'},
+    { field: 'name', label: 'Name'},
+    { field: 'phone', label: 'Phone'},
+    { field: 'datetime', label: 'Date'},
+    { field: 'details', label: 'Details'},
+  ],
 })
 
 export const getters = {
@@ -10,6 +26,12 @@ export const getters = {
   FILTERS__MEETS(state) {
     return state.filtersMeets
   },
+  MEETS_FIELDS(state) {
+    return state.meetsFields
+  },
+  MEETS_FORM_FIELDS(state) {
+    return state.meetsFormFields
+  }
 }
 
 export const mutations = {

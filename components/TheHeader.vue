@@ -31,7 +31,7 @@
           </div>
           <div class="date">
             <nuxt-link :to="localePath('/')">
-              <b-button type="is-success">Курсы валют</b-button>
+              <b-button type="is-success">{{ $t("header.exchange_rates") }}</b-button>
             </nuxt-link>
           </div>
           <div class="date">

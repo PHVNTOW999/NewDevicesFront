@@ -5,26 +5,8 @@
       <b-button class="w-full" type="is-success" is-light @click="post()">Добавить</b-button>
     </div>
 
-    <b-field label="№">
-      <b-input class="w-full" v-model="form.no" type="number" />
-    </b-field>
-
-    <b-field label="Имя">
-      <b-input class="w-full" v-model="form.name" />
-    </b-field>
-
-    <b-field label="Телефон">
-      <b-input class="w-full" v-model="form.phone" />
-    </b-field>
-
-    <b-field label="Дата">
-      <div class="flex w-full">
-        <b-input class="w-full" v-model="form.datetime" />
-      </div>
-    </b-field>
-
-    <b-field label="Детали">
-      <b-input class="w-full" v-model="form.details" type="details" />
+    <b-field v-for="obj in FIELDS" :label="obj.label">
+      <b-input class="w-full" v-model="form[obj.field]" :type="obj.type" />
     </b-field>
 
     <hr />
@@ -67,6 +49,9 @@ export default {
   computed: {
     MEET_DATA() {
       return this.$store.getters["info/MEETS"]
+    },
+    FIELDS() {
+      return this.$store.getters["info/MEETS_FORM_FIELDS"]
     }
   },
   created() {
