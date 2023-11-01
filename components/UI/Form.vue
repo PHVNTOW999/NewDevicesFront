@@ -2,7 +2,7 @@
   <div class="Form grid grid-cols-[0.5fr_1fr_1fr_1fr_1fr_1fr]">
 
     <div class="mt-8">
-      <b-button class="w-full" type="is-success" is-light @click="post()">Добавить</b-button>
+      <b-button class="w-full" type="is-success" is-light @click="post()">{{ $t("add") }}</b-button>
     </div>
 
     <b-field v-for="obj in FIELDS" :label="obj.label">

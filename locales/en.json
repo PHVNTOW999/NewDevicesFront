@@ -1,6 +1,13 @@
 {
   "header": {
+    "info": "Information",
+    "meets": "Meets",
     "exchange_rates": "Exchange rates"
   },
-  "test": "Hello"
+  "field": {
+    "status": "Status",
+    "active": "Active",
+    "isDone": "Done"
+  },
+  "add": "Add"
 }

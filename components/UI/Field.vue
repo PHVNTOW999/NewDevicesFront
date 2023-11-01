@@ -5,7 +5,9 @@
       <div v-if="field === 'isActive'" @click="updateBTN()">
         <b-checkbox v-model="pole"
                     type="is-success">
-          <span>{{ !pole ? 'Завершено' : 'Активно' }}</span>
+          <span :class="pole ? 'line-through' : 'no-underline'">
+            {{ pole ? $t("field.isDone") : $t("field.active") }}
+          </span>
         </b-checkbox>
       </div>
 
@@ -29,6 +31,25 @@
           </div>
         </b-tooltip>
         <b-input v-model="pole" />
+      </div>
+
+      <div class="flex justify-between" v-if="field === 'client'">
+        <b-tooltip label="Сохранить">
+          <div class="p-2 cursor-pointer" @click="updateBTN()">
+            <b-icon
+              icon="content-save-all-outline"
+              size="is-medium" />
+          </div>
+        </b-tooltip>
+        <b-select placeholder="Select a name">
+          <option
+            v-for="client in CLIENTS"
+            :value="pole"
+            :key="client.uuid">
+            {{ client.name }}
+          </option>
+        </b-select>
+<!--        <b-input v-model="pole.name" />-->
       </div>
 
       <div class="flex justify-between" v-if="field === 'phone'">
@@ -119,8 +140,6 @@ export default {
       form.field[this.field] = this.pole
 
       try {
-        // if (this.field === 'datetime' && this.pole === "") await this.$store.dispatch('info/PATCH__MEET__DATETIME', form)
-        // else
         await this.$store.dispatch('info/PUT__MEET', form)
         this.$buefy.notification.open({
           message: 'Сохранено',
@@ -149,6 +168,11 @@ export default {
         loadingComponent.close()
       }
     }
+  },
+  computed: {
+    CLIENTS() {
+      return this.$store.getters["info/CLIENTS"]
+    },
   },
   created() {
     this.pole = this.data

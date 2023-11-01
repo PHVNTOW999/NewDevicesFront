@@ -4,8 +4,8 @@
       <b-navbar>
         <template #start>
 
-          <b-navbar-dropdown label="Информация">
-            <router-link :to="localePath('/info/meet')"><b-navbar-item>Встречи</b-navbar-item></router-link>
+          <b-navbar-dropdown :label="$t('header.info')" >
+            <router-link :to="localePath('/info/meet')"><b-navbar-item>{{ $t("header.meets") }}</b-navbar-item></router-link>
             <router-link to="/info/orders"><b-navbar-item>Заказы</b-navbar-item></router-link>
             <router-link to="/info/orders"><b-navbar-item>Предложения</b-navbar-item></router-link>
             <router-link to="/info/orders"><b-navbar-item>Договоренности</b-navbar-item></router-link>

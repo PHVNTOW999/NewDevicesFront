@@ -3,7 +3,7 @@ export const state = () => ({
   meetsFields: [
     { field: 'isActive', label: 'Status'},
     { field: 'no', label: '№', type: 'number'},
-    { field: 'name', label: 'Name'},
+    { field: 'client', label: 'Client'},
     { field: 'phone', label: 'Phone'},
     { field: 'datetime', label: 'Date'},
     { field: 'details', label: 'Details'},
@@ -17,6 +17,8 @@ export const state = () => ({
     { field: 'datetime', label: 'Date'},
     { field: 'details', label: 'Details'},
   ],
+
+  clients: null
 })
 
 export const getters = {
@@ -31,6 +33,9 @@ export const getters = {
   },
   MEETS_FORM_FIELDS(state) {
     return state.meetsFormFields
+  },
+  CLIENTS(state) {
+    return state.clients
   }
 }
 
@@ -58,7 +63,10 @@ export const mutations = {
   },
   DEL__FILTERS(state) {
     state.filtersMeets = state.meets
-  }
+  },
+  SET__CLIENTS(state, payload) {
+    state.clients = payload
+  },
 }
 
 export const actions = {
@@ -94,6 +102,14 @@ export const actions = {
   DEL__MEET({ commit }, payload) {
     return new Promise((res, rej) => {
       this.$axios.$delete(`/api/info/meet/${payload}/`).then((data) => {
+        res(data)
+      }).catch((error) => { rej(console.error(error)) })
+    })
+  },
+  GET__CLIENTS({ commit }) {
+    return new Promise((res, rej) => {
+      this.$axios.$get(`/api/info/clientlist/`).then((data) => {
+        commit('SET__CLIENTS', data)
         res(data)
       }).catch((error) => { rej(console.error(error)) })
     })

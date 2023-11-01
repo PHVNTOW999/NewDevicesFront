@@ -2,28 +2,30 @@
   <div class="meets">
     <div class="main w-full">
       <div class="main__title">
-        <h1 class="m-5 text-4xl text-center">Встречи</h1>
+        <h1 class="m-5 text-4xl text-center">{{ $t("header.meets") }}</h1>
       </div>
       <Form />
       <TableFilter />
-      <meet-table class="mt-10" />
+      <Table class="mt-10" />
     </div>
   </div>
 </template>
 
 <script>
-import MeetTable from "~/components/info/table.vue";
-import Form from "~/components/info/Form.vue";
-import TableFilter from "~/components/info/TableFilter.vue";
+
+import TableFilter from "~/components/UI/TableFilter.vue";
+import Form from "~/components/UI/Form.vue";
+import Table from "~/components/UI/Table.vue";
 
 export default {
   name: "index",
-  components: {TableFilter, Form, MeetTable},
+  components: {TableFilter, Form, Table},
   methods: {
     async GET_DATA() {
       const loadingComponent = this.$buefy.loading.open()
       try {
         await this.$store.dispatch('info/GET__MEETS')
+        await this.$store.dispatch('info/GET__CLIENTS')
       } catch(e) {
         this.$buefy.notification.open({
           message: `Error: ${e}`,

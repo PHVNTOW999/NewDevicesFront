@@ -24,10 +24,10 @@
 </template>
 
 <script>
-import Field from "~/components/info/Field.vue";
+import Field from "~/components/UI/Field.vue";
 
 export default {
-  name: "meetTable",
+  name: "Table",
   data() { return { tableKey: 0 } },
   components: {Field},
   computed: {
