@@ -4,8 +4,8 @@ export const state = () => ({
     { field: 'isActive', label: 'Status'},
     { field: 'no', label: '№', type: 'number'},
     { field: 'client', label: 'Client'},
-    { field: 'phone', label: 'Phone'},
-    { field: 'datetime', label: 'Date'},
+    { field: 'contacts', label: 'Contacts'},
+    { field: 'datetime', label: 'Date - Time'},
     { field: 'details', label: 'Details'},
   ],
 

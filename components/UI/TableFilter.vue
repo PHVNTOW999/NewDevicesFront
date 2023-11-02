@@ -8,7 +8,7 @@
       <b-field label="Статус">
         <b-checkbox v-model="filters.isActive"
                     type="is-success">
-          <span>{{ !filters.isActive ? 'Завершено' : 'Активно' }}</span>
+          <span>{{ filters.isActive ? $t("field.isDone") : $t("field.active") }}</span>
         </b-checkbox>
       </b-field>
 

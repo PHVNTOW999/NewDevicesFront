@@ -11,7 +11,10 @@
         ref="table">
 
         <b-table-column v-for="obj in FIELDS" :field="obj.field" :label="obj.label" v-slot="props">
-          <Field :data="props.row[obj.field]" :field="obj.field" :uuid="props.row.uuid" />
+          <Field :data="props.row[obj.field]"
+                 :field="obj.field"
+                 :contacts="{ 'phones': props.row.phones, 'emails': props.row.emails }"
+                 :uuid="props.row.uuid" />
         </b-table-column>
 
         <b-table-column field="delete" v-slot="props">

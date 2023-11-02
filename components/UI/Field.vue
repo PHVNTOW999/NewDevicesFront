@@ -41,10 +41,11 @@
               size="is-medium" />
           </div>
         </b-tooltip>
-        <b-select placeholder="Select a name">
+        <b-select placeholder="Select a name" selected>
           <option
             v-for="client in CLIENTS"
-            :value="pole"
+            v-model="pole"
+            selected
             :key="client.uuid">
             {{ client.name }}
           </option>
@@ -52,22 +53,69 @@
 <!--        <b-input v-model="pole.name" />-->
       </div>
 
-      <div class="flex justify-between" v-if="field === 'phone'">
-        <b-tooltip label="Сохранить">
-          <div class="p-2 cursor-pointer" @click="updateBTN()">
-            <b-icon
-              icon="content-save-all-outline"
-              size="is-medium" />
-          </div>
-        </b-tooltip>
-        <b-input v-model="pole" type="tel" />
-        <div class="block text-center pt-1">
-          <a :href="'tel: ' + pole" class="p-2">
-            <b-icon
-              icon="phone"
-              size="is-medium" />
-          </a>
+      <div class="flex justify-between" v-if="field === 'contacts'">
+        <div @click="modalActive = true">
+          <b-icon
+            icon="phone"
+            size="is-medium" />
         </div>
+
+        <b-modal
+          v-model="modalActive"
+          has-modal-card
+          trap-focus
+          :destroy-on-hide="false"
+          aria-role="dialog"
+          aria-label="Example Modal"
+          close-button-aria-label="Close"
+          aria-modal>
+          <div class="modal-card" style="width: auto">
+            <header class="modal-card-head">
+              <p class="modal-card-title">Contacts</p>
+              <button
+                type="button"
+                class="delete"
+                @click="$emit('close')"/>
+            </header>
+            <section class="modal-card-body">
+              <b-field label="Phones">
+                <div class="addPhone">
+                  <b-input
+                    type="text"
+                    :value="emailInput"
+                    placeholder="Write phone">
+                  </b-input>
+                </div>
+                <div class="phoneList">
+                  <div class="phoneBlock" v-for="phone in contacts.phones">
+                    <h1><a :href="'tel:' + phone.num">{{ phone.num }}</a></h1>
+                    <b-tooltip label="Удалить номер" position="is-left">
+                      <b-button type="is-danger"
+                                size="is-small"
+                                icon-right="delete" />
+                    </b-tooltip>
+                  </div>
+                </div>
+              </b-field>
+
+              <b-field label="Emails">
+                <div class="addEmail">
+                  <b-input
+                    type="text"
+                    :value="emailInput"
+                    placeholder="Write email">
+                  </b-input>
+                </div>
+                <div class="emailList">
+                  <div class="emailBlock" v-for="email in contacts.emails">
+                    {{ email.name }}
+                  </div>
+                </div>
+              </b-field>
+
+            </section>
+          </div>
+        </b-modal>
       </div>
 
       <div class="flex justify-between" v-if="field === 'datetime'" >
@@ -78,7 +126,27 @@
               size="is-medium" />
           </div>
         </b-tooltip>
-        <b-input v-model="pole" />
+<!--        <b-input v-model="pole" />-->
+        <b-datetimepicker v-model="pole"
+                          placeholder="Click to select...">
+
+          <template #left>
+            <b-button
+              label="Now"
+              type="is-primary"
+              icon-left="clock"
+              @click="pole = new Date()" />
+          </template>
+
+          <template #right>
+            <b-button
+              label="Clear"
+              type="is-danger"
+              icon-left="close"
+              outlined
+              @click="pole = null" />
+          </template>
+        </b-datetimepicker>
       </div>
 
       <div class="flex justify-between" v-if="field === 'details'">
@@ -108,10 +176,14 @@
 
 export default {
   name: "customInput",
-  props: ['uuid', 'data', 'field'],
+  props: ['uuid', 'data', 'field', 'contacts'],
   data() {
     return {
-      pole: null
+      pole: null,
+
+      modalActive: false,
+      phoneInput: null,
+      emailInput: null,
     }
   },
   methods: {
@@ -175,7 +247,10 @@ export default {
     },
   },
   created() {
-    this.pole = this.data
+    if(this.field === 'datetime') {
+      this.pole = new Date(this.data)
+    }
+    else this.pole = this.data
   }
 }
 </script>
