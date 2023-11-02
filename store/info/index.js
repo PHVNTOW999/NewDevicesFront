@@ -114,4 +114,25 @@ export const actions = {
       }).catch((error) => { rej(console.error(error)) })
     })
   },
+  POST__PHONE({ commit }, payload) {
+    return new Promise((res, rej) => {
+      this.$axios.$post(`/api/info/phonelist/`, payload).then((data) => {
+        res(data)
+      }).catch((error) => { rej(console.error(error)) })
+    })
+  },
+  DEL__PHONE({ commit }, payload) {
+    return new Promise((res, rej) => {
+      this.$axios.$delete(`/api/info/phonelist/`, payload).then((data) => {
+        res(data)
+      }).catch((error) => { rej(console.error(error)) })
+    })
+  },
+  SET__CONTACTS({ commit }, payload) {
+    return new Promise((res, rej) => {
+      this.$axios.$patch(`/api/info/meet/${payload.uuid}/`, payload.data).then((data) => {
+        res(data)
+      }).catch((error) => { rej(console.error(error)) })
+    })
+  },
 }

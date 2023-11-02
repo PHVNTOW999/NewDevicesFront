@@ -80,19 +80,36 @@
             <section class="modal-card-body">
               <b-field label="Phones">
                 <div class="addPhone">
-                  <b-input
-                    type="text"
-                    :value="emailInput"
-                    placeholder="Write phone">
-                  </b-input>
+                  <div class="addPhone__input">
+                    <b-input
+                      type="text"
+                      v-model="phoneInput"
+                      placeholder="Write phone">
+                    </b-input>
+                    <b-input
+                      type="text"
+                      v-model="phoneDesc"
+                      placeholder="Write phone's description">
+                    </b-input>
+                  </div>
+                  <div class="addPhone__btn">
+                    <b-tooltip label="Добавить номер" position="is-left">
+                      <b-button type="is-success"
+                                size="is-small"
+                                icon-right="plus"
+                                @click="addPhone()"/>
+                    </b-tooltip>
+                  </div>
                 </div>
                 <div class="phoneList">
-                  <div class="phoneBlock" v-for="phone in contacts.phones">
-                    <h1><a :href="'tel:' + phone.num">{{ phone.num }}</a></h1>
+                  <div class="phoneBlock" v-for="phone in contacts.phones" :key="phone.uuid">
+                    <a :href="'tel:' + phone.num"><h1 class="hover:text-sky-400">{{ phone.num }}</h1></a>
+                    <p>{{ phone.uuid }}</p>
                     <b-tooltip label="Удалить номер" position="is-left">
                       <b-button type="is-danger"
                                 size="is-small"
-                                icon-right="delete" />
+                                icon-right="delete"
+                                @click="delPhone('0792f803-2d6f-4b6d-be27-1c5df96ac9fa')"/>
                     </b-tooltip>
                   </div>
                 </div>
@@ -102,7 +119,7 @@
                 <div class="addEmail">
                   <b-input
                     type="text"
-                    :value="emailInput"
+                    v-model="emailInput"
                     placeholder="Write email">
                   </b-input>
                 </div>
@@ -183,6 +200,7 @@ export default {
 
       modalActive: false,
       phoneInput: null,
+      phoneDesc: null,
       emailInput: null,
     }
   },
@@ -237,6 +255,60 @@ export default {
         })
       } finally {
         this.$router.go(0)
+        loadingComponent.close()
+      }
+    },
+    async addPhone() {
+      const loadingComponent = this.$buefy.loading.open()
+      const form = {
+        num: this.phoneInput,
+        desc: this.phoneDesc
+      }
+      try {
+        const phoneUUID = await this.$store.dispatch('info/POST__PHONE', form)
+        const newForm = {
+          uuid: this.uuid,
+          data: {
+            phones: phoneUUID,
+            emails: ""
+          }
+        }
+        await this.$store.dispatch('info/SET__CONTACTS', newForm)
+        this.$buefy.notification.open({
+          message: 'Сохранено',
+          type: 'is-success'
+        })
+      } catch(e) {
+        this.$buefy.notification.open({
+          message: `Ошибка: ${e}`,
+          type: 'is-danger',
+        })
+      } finally {
+        setTimeout(() => {
+          this.$store.dispatch('info/GET__MEETS')
+        }, 100)
+        loadingComponent.close()
+      }
+    },
+    async delPhone(payload) {
+      const loadingComponent = this.$buefy.loading.open()
+
+      const form = {
+        uuid: "e141f3b2-b7fb-47a5-8b98-543e6a7173f2"
+      }
+
+      try {
+        await this.$store.dispatch('info/DEL__PHONE', form)
+        this.$buefy.notification.open({
+          message: 'Удалено!',
+          type: 'is-success'
+        })
+      } catch(e) {
+        this.$buefy.notification.open({
+          message: `Ошибка: ${e}`,
+          type: 'is-danger',
+        })
+      } finally {
         loadingComponent.close()
       }
     }
