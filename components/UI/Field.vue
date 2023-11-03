@@ -11,46 +11,35 @@
         </b-checkbox>
       </div>
 
-      <div class="flex justify-between" v-if="field === 'no'" >
-        <b-tooltip label="Сохранить">
-          <div class="p-2 cursor-pointer" @click="updateBTN()">
-            <b-icon
-              icon="content-save-all-outline"
-              size="is-medium" />
-          </div>
-        </b-tooltip>
+      <div class="flex justify-between" v-if="field === 'no'">
+        <div @click="updateBTN()">
+          <SaveBTN />
+        </div>
         <b-input v-model="pole" type="number" />
       </div>
 
       <div class="flex justify-between" v-if="field === 'name'">
-        <b-tooltip label="Сохранить">
-          <div class="p-2 cursor-pointer" @click="updateBTN()">
-            <b-icon
-              icon="content-save-all-outline"
-              size="is-medium" />
-          </div>
-        </b-tooltip>
+        <div @click="updateBTN()">
+          <SaveBTN />
+        </div>
         <b-input v-model="pole" />
       </div>
 
       <div class="flex justify-between" v-if="field === 'client'">
         <b-tooltip label="Сохранить">
-          <div class="p-2 cursor-pointer" @click="updateBTN()">
+          <div class="p-2 cursor-pointer" @click="updateClientBTN()">
             <b-icon
               icon="content-save-all-outline"
               size="is-medium" />
           </div>
         </b-tooltip>
-        <b-select placeholder="Select a name" selected>
-          <option
-            v-for="client in CLIENTS"
-            v-model="pole"
-            selected
-            :key="client.uuid">
-            {{ client.name }}
-          </option>
-        </b-select>
-<!--        <b-input v-model="pole.name" />-->
+        <div v-if="CLIENTS">
+          <multiselect v-model="pole" :options="CLIENTS" track-by="name" label="name" :allow-empty="false">
+            <template slot="singleLabel" slot-scope="{ option }">
+              <strong>{{ option.name }}</strong>
+            </template>
+          </multiselect>
+        </div>
       </div>
 
       <div class="flex justify-between" v-if="field === 'contacts'">
@@ -97,7 +86,7 @@
                       <b-button type="is-success"
                                 size="is-small"
                                 icon-right="plus"
-                                @click="addPhone()"/>
+                                @click="updateContacts()"/>
                     </b-tooltip>
                   </div>
                 </div>
@@ -109,7 +98,7 @@
                       <b-button type="is-danger"
                                 size="is-small"
                                 icon-right="delete"
-                                @click="delPhone('0792f803-2d6f-4b6d-be27-1c5df96ac9fa')"/>
+                                @click="delPhone(phone.uuid)"/>
                     </b-tooltip>
                   </div>
                 </div>
@@ -136,14 +125,9 @@
       </div>
 
       <div class="flex justify-between" v-if="field === 'datetime'" >
-        <b-tooltip label="Сохранить">
-          <div class="p-2 cursor-pointer" @click="updateBTN()">
-            <b-icon
-              icon="content-save-all-outline"
-              size="is-medium" />
-          </div>
-        </b-tooltip>
-<!--        <b-input v-model="pole" />-->
+        <div @click="updateBTN()">
+          <SaveBTN />
+        </div>
         <b-datetimepicker v-model="pole"
                           placeholder="Click to select...">
 
@@ -167,22 +151,16 @@
       </div>
 
       <div class="flex justify-between" v-if="field === 'details'">
-        <b-tooltip label="Сохранить">
-          <div class="p-2 cursor-pointer" @click="updateBTN()">
-            <b-icon
-              icon="content-save-all-outline"
-              size="is-medium" />
-          </div>
-        </b-tooltip>
+        <div @click="updateBTN()">
+          <SaveBTN />
+        </div>
         <b-input v-model="pole" />
       </div>
 
       <div v-if="field === 'delete'">
-        <b-tooltip label="Удалить" position="is-left">
-          <b-button type="is-danger"
-                    icon-right="delete"
-                    @click="delBTN()" />
-        </b-tooltip>
+        <div @click="delBTN()">
+          <DelBTN />
+        </div>
       </div>
 
     </b-field>
@@ -190,10 +168,14 @@
 </template>
 
 <script>
+import Multiselect from 'vue-multiselect'
+import SaveBTN from "~/components/UI/Buttons/SaveBTN.vue";
+import DelBTN from "~/components/UI/Buttons/DelBTN.vue";
 
 export default {
   name: "customInput",
   props: ['uuid', 'data', 'field', 'contacts'],
+  components: {DelBTN, SaveBTN, Multiselect },
   data() {
     return {
       pole: null,
@@ -205,6 +187,14 @@ export default {
     }
   },
   methods: {
+    updateClientBTN() {
+      this.$buefy.dialog.confirm({
+        message: 'Сохранить изменения?',
+        cancelText: 'Нет',
+        confirmText: 'Сохранить',
+        onConfirm: () => this.setClient()
+      })
+    },
     updateBTN() {
       this.$buefy.dialog.confirm({
         message: 'Сохранить изменения?',
@@ -258,7 +248,34 @@ export default {
         loadingComponent.close()
       }
     },
-    async addPhone() {
+    async setClient() {
+      const loadingComponent = this.$buefy.loading.open()
+
+      const form = {
+        uuid: this.uuid,
+        data: {
+          client: this.pole,
+          phones: "",
+          emails: ""
+        }
+      }
+
+      try {
+        await this.$store.dispatch('info/SET__CLIENT', form)
+        this.$buefy.notification.open({
+          message: 'Сохранено',
+          type: 'is-success'
+        })
+      } catch(e) {
+        this.$buefy.notification.open({
+          message: `Ошибка: ${e}`,
+          type: 'is-danger',
+        })
+      } finally {
+        loadingComponent.close()
+      }
+    },
+    async updateContacts() {
       const loadingComponent = this.$buefy.loading.open()
       const form = {
         num: this.phoneInput,
@@ -270,10 +287,11 @@ export default {
           uuid: this.uuid,
           data: {
             phones: phoneUUID,
-            emails: ""
+            emails: "",
+            client: ""
           }
         }
-        await this.$store.dispatch('info/SET__CONTACTS', newForm)
+        await this.$store.dispatch('info/SET__CONTACT', newForm)
         this.$buefy.notification.open({
           message: 'Сохранено',
           type: 'is-success'
@@ -293,12 +311,14 @@ export default {
     async delPhone(payload) {
       const loadingComponent = this.$buefy.loading.open()
 
-      const form = {
-        uuid: "e141f3b2-b7fb-47a5-8b98-543e6a7173f2"
-      }
+      const form = {}
+      form["uuid"] = payload
 
       try {
-        await this.$store.dispatch('info/DEL__PHONE', form)
+        console.log(form)
+
+        await this.$store.dispatch('info/DEL__CONTACT', form)
+
         this.$buefy.notification.open({
           message: 'Удалено!',
           type: 'is-success'

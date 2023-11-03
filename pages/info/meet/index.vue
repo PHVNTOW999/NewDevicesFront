@@ -6,7 +6,7 @@
       </div>
       <Form />
       <TableFilter />
-      <Table class="mt-10" />
+      <Table title="Data" :DATA="DATA" :FIELDS="FIELDS" class="mt-10" />
     </div>
   </div>
 </template>
@@ -37,6 +37,14 @@ export default {
         }, 100)
         loadingComponent.close()
       }
+    }
+  },
+  computed: {
+    DATA() {
+      return this.$store.getters["info/FILTERS__MEETS"]
+    },
+    FIELDS() {
+      return this.$store.getters["info/MEETS_FIELDS"]
     }
   },
   created() {

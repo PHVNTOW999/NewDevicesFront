@@ -1,12 +1,13 @@
 <template>
   <div class="table w-full">
     <div class="table__title">
-      <h1 class="m-5 text-4xl text-center">Данные</h1>
+      <h1 class="m-5 text-4xl text-center">{{ $t(this.title) }}</h1>
     </div>
     <div class="table__body" v-if="DATA">
       <b-table
         :key="tableKey"
         :data="DATA"
+
         :bordered="true"
         ref="table">
 
@@ -31,16 +32,9 @@ import Field from "~/components/UI/Field.vue";
 
 export default {
   name: "Table",
+  props: ['title', 'DATA', 'FIELDS'],
   data() { return { tableKey: 0 } },
   components: {Field},
-  computed: {
-    DATA() {
-      return this.$store.getters["info/FILTERS__MEETS"]
-    },
-    FIELDS() {
-      return this.$store.getters["info/MEETS_FIELDS"]
-    }
-  },
   watch: {
     DATA() {
       return this.tableKey += 1

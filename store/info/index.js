@@ -70,6 +70,7 @@ export const mutations = {
 }
 
 export const actions = {
+  // MEETS
   GET__MEETS({ commit }) {
     return new Promise((res, rej) => {
       this.$axios.$get(`/api/info/meetlist/`).then((data) => {
@@ -92,13 +93,6 @@ export const actions = {
       }).catch((error) => { rej(console.error(error)) })
     })
   },
-  // PATCH__MEET__DATETIME({ commit }, payload) {
-  //   return new Promise((res, rej) => {
-  //     this.$axios.$patch(`/api/info/meet/${payload.uuid}/`, payload.field).then((data) => {
-  //       res(data)
-  //     }).catch((error) => { rej(console.error(error)) })
-  //   })
-  // },
   DEL__MEET({ commit }, payload) {
     return new Promise((res, rej) => {
       this.$axios.$delete(`/api/info/meet/${payload}/`).then((data) => {
@@ -106,6 +100,7 @@ export const actions = {
       }).catch((error) => { rej(console.error(error)) })
     })
   },
+  // CLIENTS
   GET__CLIENTS({ commit }) {
     return new Promise((res, rej) => {
       this.$axios.$get(`/api/info/clientlist/`).then((data) => {
@@ -114,6 +109,14 @@ export const actions = {
       }).catch((error) => { rej(console.error(error)) })
     })
   },
+  SET__CLIENT({ commit }, payload) {
+    return new Promise((res, rej) => {
+      this.$axios.$patch(`/api/info/meet/${payload.uuid}/`, payload.data).then((data) => {
+        res(data)
+      }).catch((error) => { rej(console.error(error)) })
+    })
+  },
+  // CONTACTS
   POST__PHONE({ commit }, payload) {
     return new Promise((res, rej) => {
       this.$axios.$post(`/api/info/phonelist/`, payload).then((data) => {
@@ -121,14 +124,18 @@ export const actions = {
       }).catch((error) => { rej(console.error(error)) })
     })
   },
-  DEL__PHONE({ commit }, payload) {
+  DEL__CONTACT({ commit }, payload) {
     return new Promise((res, rej) => {
-      this.$axios.$delete(`/api/info/phonelist/`, payload).then((data) => {
+      this.$axios.$get(`/api/info/phonelist/`, { 'hjh': 123 }, {
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }).then((data) => {
         res(data)
       }).catch((error) => { rej(console.error(error)) })
     })
   },
-  SET__CONTACTS({ commit }, payload) {
+  SET__CONTACT({ commit }, payload) {
     return new Promise((res, rej) => {
       this.$axios.$patch(`/api/info/meet/${payload.uuid}/`, payload.data).then((data) => {
         res(data)
