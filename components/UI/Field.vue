@@ -319,7 +319,7 @@ export default {
     },
   },
   created() {
-    if(this.field === 'datetime') {
+    if(this.field === 'datetime' && this.data !== null) {
       this.pole = new Date(this.data)
     }
     else this.pole = this.data
