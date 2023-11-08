@@ -33,7 +33,7 @@
             </template>
           </multiselect>
         </div>
-        <div @click="updateBTN()">
+        <div @click="updateClientBTN()">
           <SaveBTN />
         </div>
       </div>

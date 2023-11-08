@@ -41,7 +41,7 @@
                   placeholder="Write phone's description"
                   @keyup.native.enter="addPhone()" />
               </div>
-              <div class="addPhone__btn ml-2 h-full">
+              <div class="addPhone__btn ml-2 h-full pr-8">
                 <b-tooltip label="Добавить номер" position="is-top" class="h-full">
                   <b-button type="is-success"
                             class="h-full"
@@ -91,21 +91,65 @@
               </div>
 
             </div>
+
           </b-field>
 
           <b-field label="Emails">
-            <div class="addEmail">
-              <b-input
-                type="text"
-                v-model="emailInput"
-                placeholder="Write email">
-              </b-input>
-            </div>
-            <div class="emailList">
-              <div class="emailBlock" v-for="email in contacts.emails">
-                {{ email.name }}
+            <div class="addEmail grid grid-cols-[1fr_0.3fr]">
+              <div class="addEmail__input">
+                <b-input
+                  class="w-full"
+                  type="email"
+                  v-model="emailInput"
+                  placeholder="Write email"
+                  @keyup.native.enter="addEmail()" />
+              </div>
+              <div class="addEmail__btn ml-2 h-full pr-8">
+                <b-tooltip label="Добавить Почту" position="is-top" class="h-full">
+                  <b-button type="is-success"
+                            class="h-full"
+                            size="is-small"
+                            icon-right="plus"
+                            @click="addEmail()" />
+                </b-tooltip>
               </div>
             </div>
+          </b-field>
+
+          <b-field>
+
+            <div class="emailList pr-16">
+
+              <div class="emailListOld">
+                <div class="emailList mt-1 p-2 flex justify-between shadow-2xl shadow-black-300/80"
+                     v-for="(email, i) in contacts.emails"
+                     :key="email.uuid">
+                  <a @click="copyEmail(email.name)"><h1 class="hover:text-emerald-500">{{ email.name }}</h1></a>
+                  <b-tooltip label="Удалить номер" position="is-left">
+                    <b-button type="is-danger"
+                              size="is-small"
+                              icon-right="delete"
+                              @click="delEmail(i, email.uuid)"/>
+                  </b-tooltip>
+                </div>
+              </div>
+
+              <div class="emailListNew">
+                <div class="emailList mt-1 p-2 flex justify-between shadow-2xl shadow-black-300/80"
+                     v-for="(email, i) in newEmails"
+                     :key="email.id">
+                  <a @click="copyEmail(email.name)"><h1 class="hover:text-emerald-500">{{ email.name }}</h1></a>
+                  <b-tooltip label="Удалить номер" position="is-left">
+                    <b-button type="is-danger"
+                              size="is-small"
+                              icon-right="delete"
+                              @click="delNewEmail(i)"/>
+                  </b-tooltip>
+                </div>
+              </div>
+
+            </div>
+
           </b-field>
 
         </section>
@@ -136,24 +180,94 @@ export default {
       phoneNum: null,
       phoneDesc: null,
       emailInput: null,
-
       newPhones: [],
       deletedPhones: [],
+      newEmails: [],
+      deletedEmails: []
     }
   },
   watch: {
     modalActive() {
       this.modalActive ? this.modalActive = true : this.modalActive = false
+
       this.phoneNum = null
       this.phoneDesc = null
       this.emailInput = null
+
       this.newPhones = []
       this.deletedPhones = []
-
-      // if(this.modalActive = false) await this.$store.dispatch('info/GET__MEETS')
+      this.newEmails = []
+      this.deletedEmails = []
     }
   },
   methods: {
+    copyEmail(email) {
+      const loadingComponent = this.$buefy.loading.open()
+      try {
+        window.navigator.clipboard.writeText(email)
+
+        this.$buefy.notification.open({
+          message: 'Copy',
+          type: 'is-success'
+        })
+      } catch(e) {
+        this.$buefy.notification.open({
+          message: `Ошибка: ${e}`,
+          type: 'is-danger',
+        })
+      } finally {
+        loadingComponent.close()
+      }
+    },
+    addEmail() {
+      if(this.emailInput) {
+        const form = {
+          uuid: this.uuid,
+          data: {
+            id: this.emailInput.length,
+            name: this.emailInput,
+          }
+        }
+        this.newEmails.push(form.data)
+        this.emailInput = null
+      }
+    },
+    delNewEmail(i) {
+      this.newEmails.splice(i, 1)
+    },
+    delEmail(i, uuid) {
+      const form = {
+        uuid: this.uuid,
+        data: i
+      }
+      this.$store.commit('info/MEETS__DEL__EMAIL', form)
+      this.deletedEmails.push(uuid)
+    },
+    async postEmail(payload) {
+      const loadingComponent = this.$buefy.loading.open()
+      const form = {
+        name: payload.name,
+      }
+      try {
+        const emailUUID = await this.$store.dispatch('info/POST__EMAIL', form)
+        const newForm = {
+          uuid: this.uuid,
+          data: {
+            phones: "",
+            emails: emailUUID,
+            client: ""
+          }
+        }
+        await this.$store.dispatch('info/SET__CONTACT', newForm)
+      } catch(e) {
+        this.$buefy.notification.open({
+          message: `Ошибка: ${e}`,
+          type: 'is-danger',
+        })
+      } finally {
+        loadingComponent.close()
+      }
+    },
     addPhone() {
       if(this.phoneNum) {
         const form = {
@@ -209,7 +323,6 @@ export default {
     async saveContacts() {
       const loadingComponent = this.$buefy.loading.open()
       try {
-        // Phones
         if(this.newPhones.length) {
           for(let phone of this.newPhones) {
             await this.postPhone(phone)
@@ -220,7 +333,18 @@ export default {
             await this.$store.dispatch('info/DEL__PHONE', phone)
           }
         }
-        // Emails
+        if(this.newEmails.length) {
+          for(let email of this.newEmails) {
+            await this.postEmail(email)
+          }
+        }
+        if(this.deletedEmails.length) {
+          for(let email of this.deletedEmails) {
+            console.log(email)
+            await this.$store.dispatch('info/DEL__EMAIL', email)
+          }
+        }
+
         this.$buefy.notification.open({
           message: 'Сохранено',
           type: 'is-success'

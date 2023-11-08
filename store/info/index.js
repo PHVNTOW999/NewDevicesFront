@@ -44,12 +44,6 @@ export const mutations = {
     state.meets = payload
     state.filtersMeets = payload
   },
-  MEETS__DEL__PHONE(state, payload) {
-    const meet = state.meets.find((meet) => {
-      return meet.uuid === payload.uuid
-    })
-    meet.phones.splice(payload.data, 1)
-  },
   SET__FILTERS(state, payload) {
     const copyFilter = Object.entries(payload)
     const copyArr = state.meets
@@ -72,6 +66,18 @@ export const mutations = {
   },
   SET__CLIENTS(state, payload) {
     state.clients = payload
+  },
+  MEETS__DEL__PHONE(state, payload) {
+    const meet = state.meets.find((meet) => {
+      return meet.uuid === payload.uuid
+    })
+    meet.phones.splice(payload.data, 1)
+  },
+  MEETS__DEL__EMAIL(state, payload) {
+    const meet = state.meets.find((meet) => {
+      return meet.uuid === payload.uuid
+    })
+    meet.emails.splice(payload.data, 1)
   },
 }
 
@@ -133,6 +139,20 @@ export const actions = {
   DEL__PHONE({ commit }, payload) {
     return new Promise((res, rej) => {
       this.$axios.$delete(`/api/info/phone/${payload}`).then((data) => {
+        res(data)
+      }).catch((error) => { rej(console.error(error)) })
+    })
+  },
+  POST__EMAIL({ commit }, payload) {
+    return new Promise((res, rej) => {
+      this.$axios.$post(`/api/info/email/`, payload).then((data) => {
+        res(data)
+      }).catch((error) => { rej(console.error(error)) })
+    })
+  },
+  DEL__EMAIL({ commit }, payload) {
+    return new Promise((res, rej) => {
+      this.$axios.$delete(`/api/info/email/${payload}`).then((data) => {
         res(data)
       }).catch((error) => { rej(console.error(error)) })
     })
