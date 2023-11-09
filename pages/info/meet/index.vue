@@ -6,7 +6,14 @@
       </div>
       <Form />
       <TableFilter />
-      <Table title="Data" :DATA="DATA" :FIELDS="FIELDS" class="mt-10" />
+      <Table class="mt-10"
+             title="Data"
+             :DATA="DATA"
+             :FIELDS="FIELDS"
+             :CLIENTS="CLIENTS"
+              @save="save"
+              @setClient="setClient"
+              @del="del"/>
     </div>
   </div>
 </template>
@@ -21,6 +28,54 @@ export default {
   name: "index",
   components: {TableFilter, Form, Table},
   methods: {
+    async save(payload) {
+      const loadingComponent = this.$buefy.loading.open()
+      try {
+        await this.$store.dispatch('info/PUT__MEET', payload)
+        this.$buefy.notification.open({
+          message: 'Сохранено',
+          type: 'is-success'
+        })
+      } catch(e) {
+        this.$buefy.notification.open({
+          message: `Ошибка: ${e}`,
+          type: 'is-danger',
+        })
+      } finally {
+        loadingComponent.close()
+      }
+    },
+    async setClient(payload) {
+      const loadingComponent = this.$buefy.loading.open()
+      try {
+        await this.$store.dispatch('info/SET__CLIENT', payload)
+        this.$buefy.notification.open({
+          message: 'Сохранено',
+          type: 'is-success'
+        })
+      } catch(e) {
+        this.$buefy.notification.open({
+          message: `Ошибка: ${e}`,
+          type: 'is-danger',
+        })
+      } finally {
+        loadingComponent.close()
+      }
+    },
+    async del(payload) {
+      const loadingComponent = this.$buefy.loading.open()
+      try {
+        await this.$store.dispatch('info/DEL__MEET', payload)
+      } catch(e) {
+        this.$buefy.notification.open({
+          message: `Ошибка: ${e}`,
+          type: 'is-danger',
+        })
+      } finally {
+        await this.$store.dispatch('info/GET__MEETS')
+        loadingComponent.close()
+      }
+    },
     async GET_DATA() {
       const loadingComponent = this.$buefy.loading.open()
       try {
@@ -45,7 +100,10 @@ export default {
     },
     FIELDS() {
       return this.$store.getters["info/MEETS_FIELDS"]
-    }
+    },
+    CLIENTS() {
+      return this.$store.getters["info/CLIENTS"]
+    },
   },
   created() {
     this.GET_DATA()

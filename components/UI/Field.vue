@@ -2,7 +2,7 @@
   <div class="customInput">
     <b-field>
 
-      <div v-if="field === 'isActive'" @click="updateBTN()">
+      <div v-if="field === 'isActive'" @click="saveBTN()">
         <b-checkbox v-model="pole"
                     type="is-success">
           <span :class="pole ? 'line-through' : 'no-underline'">
@@ -12,28 +12,28 @@
       </div>
 
       <div class="flex justify-between" v-if="field === 'no'">
-        <b-input v-model="pole" type="number" />
-        <div @click="updateBTN()">
+        <b-input class="w-full" v-model="pole" type="number" />
+        <div @click="saveBTN()">
           <SaveBTN />
         </div>
       </div>
 
       <div class="flex justify-between" v-if="field === 'name'">
-        <b-input v-model="pole" />
-        <div @click="updateBTN()">
+        <b-input class="w-full" v-model="pole" />
+        <div @click="saveBTN()">
           <SaveBTN />
         </div>
       </div>
 
       <div class="flex justify-between" v-if="field === 'client'">
-        <div v-if="CLIENTS">
+        <div v-if="CLIENTS" class="w-full">
           <multiselect v-model="pole" :options="CLIENTS" track-by="name" label="name" :allow-empty="false">
             <template slot="singleLabel" slot-scope="{ option }">
               <strong>{{ option.name }}</strong>
             </template>
           </multiselect>
         </div>
-        <div @click="updateClientBTN()">
+        <div @click="saveBTNClientBTN()">
           <SaveBTN />
         </div>
       </div>
@@ -44,6 +44,7 @@
 
       <div class="flex justify-between" v-if="field === 'datetime'" >
         <b-datetimepicker v-model="pole"
+                          class="w-full"
                           placeholder="Click to select...">
 
           <template #left>
@@ -64,15 +65,15 @@
           </template>
         </b-datetimepicker>
 
-        <div @click="updateBTN()">
+        <div @click="saveBTN()">
           <SaveBTN />
         </div>
 
       </div>
 
       <div class="flex justify-between" v-if="field === 'details'">
-        <b-input v-model="pole" />
-        <div @click="updateBTN()">
+        <b-input class="w-full" v-model="pole" />
+        <div @click="saveBTN()">
           <SaveBTN />
         </div>
       </div>
@@ -95,7 +96,7 @@ import ContactsModal from "~/components/UI/ContactsModal.vue";
 
 export default {
   name: "customInput",
-  props: ['uuid', 'data', 'field', 'contacts'],
+  props: ['uuid', 'data', 'field', 'contacts', 'CLIENTS'],
   components: {ContactsModal, DelBTN, SaveBTN, Multiselect },
   data() {
     return {
@@ -103,7 +104,7 @@ export default {
     }
   },
   methods: {
-    updateClientBTN() {
+    saveBTNClientBTN() {
       this.$buefy.dialog.confirm({
         message: 'Сохранить изменения?',
         cancelText: 'Нет',
@@ -111,12 +112,12 @@ export default {
         onConfirm: () => this.setClient()
       })
     },
-    updateBTN() {
+    saveBTN() {
       this.$buefy.dialog.confirm({
         message: 'Сохранить изменения?',
         cancelText: 'Нет',
         confirmText: 'Сохранить',
-        onConfirm: () => this.update()
+        onConfirm: () => this.save()
       })
     },
     delBTN() {
@@ -127,33 +128,16 @@ export default {
         onConfirm: () => this.del()
       })
     },
-    async update() {
-      const loadingComponent = this.$buefy.loading.open()
+    save() {
+      const payload = {}
+      payload['uuid'] = this.uuid
+      payload['field'] = {}
+      payload.field[this.field] = this.pole
 
-      const form = {}
-      form['uuid'] = this.uuid
-      form['field'] = {}
-      form.field[this.field] = this.pole
-
-      try {
-        await this.$store.dispatch('info/PUT__MEET', form)
-        this.$buefy.notification.open({
-          message: 'Сохранено',
-          type: 'is-success'
-        })
-      } catch(e) {
-        this.$buefy.notification.open({
-          message: `Ошибка: ${e}`,
-          type: 'is-danger',
-        })
-      } finally {
-        loadingComponent.close()
-      }
+      this.$emit('save', payload)
     },
-    async setClient() {
-      const loadingComponent = this.$buefy.loading.open()
-
-      const form = {
+    setClient() {
+      const payload = {
         uuid: this.uuid,
         data: {
           client: this.pole,
@@ -162,40 +146,12 @@ export default {
         }
       }
 
-      try {
-        await this.$store.dispatch('info/SET__CLIENT', form)
-        this.$buefy.notification.open({
-          message: 'Сохранено',
-          type: 'is-success'
-        })
-      } catch(e) {
-        this.$buefy.notification.open({
-          message: `Ошибка: ${e}`,
-          type: 'is-danger',
-        })
-      } finally {
-        loadingComponent.close()
-      }
+      this.$emit('setClient', payload)
     },
     async del() {
-      const loadingComponent = this.$buefy.loading.open()
-      try {
-        await this.$store.dispatch('info/DEL__MEET', this.uuid)
-      } catch(e) {
-        this.$buefy.notification.open({
-          message: `Ошибка: ${e}`,
-          type: 'is-danger',
-        })
-      } finally {
-        this.$router.go(0)
-        loadingComponent.close()
-      }
-    },
-  },
-  computed: {
-    CLIENTS() {
-      return this.$store.getters["info/CLIENTS"]
-    },
+      const payload = this.uuid
+      this.$emit('del', payload)
+    }
   },
   created() {
     if(this.field === 'datetime' && this.data !== null) {

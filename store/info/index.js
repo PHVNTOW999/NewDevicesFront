@@ -12,9 +12,8 @@ export const state = () => ({
   filtersMeets: null,
   meetsFormFields: [
     { field: 'no', label: '№', type: 'number'},
-    { field: 'name', label: 'Name'},
-    { field: 'phone', label: 'Phone'},
-    { field: 'datetime', label: 'Date'},
+    { field: 'client', label: 'Client'},
+    { field: 'datetime', label: 'Date - Time'},
     { field: 'details', label: 'Details'},
   ],
 

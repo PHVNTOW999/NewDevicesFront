@@ -15,11 +15,14 @@
           <Field :data="props.row[obj.field]"
                  :field="obj.field"
                  :contacts="{ 'phones': props.row.phones, 'emails': props.row.emails }"
-                 :uuid="props.row.uuid" />
+                 :CLIENTS="CLIENTS"
+                 :uuid="props.row.uuid"
+                 @save="save"
+                 @setClient="setClient" />
         </b-table-column>
 
         <b-table-column field="delete" v-slot="props">
-          <Field :field="'delete'" :uuid="props.row.uuid" />
+          <Field :field="'delete'" :uuid="props.row.uuid" @del="del" />
         </b-table-column>
 
       </b-table>
@@ -29,12 +32,29 @@
 
 <script>
 import Field from "~/components/UI/Field.vue";
+import {data} from "autoprefixer";
 
 export default {
   name: "Table",
-  props: ['title', 'DATA', 'FIELDS'],
+  computed: {
+    data() {
+      return data
+    }
+  },
+  props: ['title', 'DATA', 'FIELDS', 'CLIENTS'],
   data() { return { tableKey: 0 } },
   components: {Field},
+  methods: {
+    save(payload) {
+      this.$emit('save', payload)
+    },
+    setClient(payload) {
+      this.$emit('setClient', payload)
+    },
+    del(payload) {
+      this.$emit('del', payload)
+    },
+  },
   watch: {
     DATA() {
       return this.tableKey += 1

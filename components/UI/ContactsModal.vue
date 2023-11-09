@@ -17,11 +17,7 @@
       aria-modal>
       <div class="modal-card text-left" style="width: auto">
         <header class="modal-card-head">
-          <p class="modal-card-title">Contacts</p>
-          <button
-            type="button"
-            class="delete"
-            @click="$emit('close')"/>
+          <h1 class="modal-card-title">Contacts</h1>
         </header>
         <section class="modal-card-body">
           <b-field label="Add Phone">
@@ -65,7 +61,7 @@
                   <a :href="'tel:' + phone.num"><h1 class="hover:text-emerald-500">{{ phone.num }}</h1></a>
                   <span v-if="phone.desc">-</span>
                   <p>{{ phone.desc }}</p>
-                  <b-tooltip label="Удалить номер" position="is-left">
+                  <b-tooltip label="Удалить номер" position="is-top">
                     <b-button type="is-danger"
                               size="is-small"
                               icon-right="delete"
@@ -81,7 +77,7 @@
                   <a :href="'tel:' + phone.num"><h1 class="hover:text-emerald-500">{{ phone.num }}</h1></a>
                   <span v-if="phone.desc">-</span>
                   <p>{{ phone.desc }}</p>
-                  <b-tooltip label="Удалить номер" position="is-left">
+                  <b-tooltip label="Удалить номер" position="is-top">
                     <b-button type="is-danger"
                               size="is-small"
                               icon-right="delete"
@@ -125,7 +121,7 @@
                      v-for="(email, i) in contacts.emails"
                      :key="email.uuid">
                   <a @click="copyEmail(email.name)"><h1 class="hover:text-emerald-500">{{ email.name }}</h1></a>
-                  <b-tooltip label="Удалить номер" position="is-left">
+                  <b-tooltip label="Удалить номер" position="is-top">
                     <b-button type="is-danger"
                               size="is-small"
                               icon-right="delete"
@@ -139,7 +135,7 @@
                      v-for="(email, i) in newEmails"
                      :key="email.id">
                   <a @click="copyEmail(email.name)"><h1 class="hover:text-emerald-500">{{ email.name }}</h1></a>
-                  <b-tooltip label="Удалить номер" position="is-left">
+                  <b-tooltip label="Удалить номер" position="is-top">
                     <b-button type="is-danger"
                               size="is-small"
                               icon-right="delete"
@@ -201,23 +197,31 @@ export default {
     }
   },
   methods: {
-    copyEmail(email) {
-      const loadingComponent = this.$buefy.loading.open()
-      try {
-        window.navigator.clipboard.writeText(email)
-
-        this.$buefy.notification.open({
-          message: 'Copy',
-          type: 'is-success'
-        })
-      } catch(e) {
-        this.$buefy.notification.open({
-          message: `Ошибка: ${e}`,
-          type: 'is-danger',
-        })
-      } finally {
-        loadingComponent.close()
+    addPhone() {
+      if(this.phoneNum) {
+        const form = {
+          uuid: this.uuid,
+          data: {
+            id: this.newPhones.length,
+            num: this.phoneNum,
+            desc: this.phoneDesc,
+          }
+        }
+        this.newPhones.push(form.data)
+        this.phoneNum = null
+        this.phoneDesc = null
       }
+    },
+    delNewPhone(i) {
+      this.newPhones.splice(i, 1)
+    },
+    delPhone(i, uuid) {
+      const form = {
+        uuid: this.uuid,
+        data: i
+      }
+      this.$store.commit('info/MEETS__DEL__PHONE', form)
+      this.deletedPhones.push(uuid)
     },
     addEmail() {
       if(this.emailInput) {
@@ -242,6 +246,24 @@ export default {
       }
       this.$store.commit('info/MEETS__DEL__EMAIL', form)
       this.deletedEmails.push(uuid)
+    },
+    copyEmail(email) {
+      const loadingComponent = this.$buefy.loading.open()
+      try {
+        window.navigator.clipboard.writeText(email)
+
+        this.$buefy.notification.open({
+          message: 'Copy',
+          type: 'is-success'
+        })
+      } catch(e) {
+        this.$buefy.notification.open({
+          message: `Ошибка: ${e}`,
+          type: 'is-danger',
+        })
+      } finally {
+        loadingComponent.close()
+      }
     },
     async postEmail(payload) {
       const loadingComponent = this.$buefy.loading.open()
@@ -268,24 +290,6 @@ export default {
         loadingComponent.close()
       }
     },
-    addPhone() {
-      if(this.phoneNum) {
-        const form = {
-          uuid: this.uuid,
-          data: {
-            id: this.newPhones.length,
-            num: this.phoneNum,
-            desc: this.phoneDesc,
-          }
-        }
-        this.newPhones.push(form.data)
-        this.phoneNum = null
-        this.phoneDesc = null
-      }
-    },
-    delNewPhone(i) {
-      this.newPhones.splice(i, 1)
-    },
     async postPhone(payload) {
       const loadingComponent = this.$buefy.loading.open()
       const form = {
@@ -311,14 +315,6 @@ export default {
       } finally {
         loadingComponent.close()
       }
-    },
-    delPhone(i, uuid) {
-      const form = {
-        uuid: this.uuid,
-        data: i
-      }
-      this.$store.commit('info/MEETS__DEL__PHONE', form)
-      this.deletedPhones.push(uuid)
     },
     async saveContacts() {
       const loadingComponent = this.$buefy.loading.open()
