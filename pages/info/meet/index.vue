@@ -4,7 +4,7 @@
       <div class="main__title">
         <h1 class="m-5 text-4xl text-center">{{ $t("header.meets") }}</h1>
       </div>
-      <Form />
+      <FormModal :FIELDS="MEETS_FORM_FIELDS" :CLIENTS="CLIENTS" :MaxNO="MEETS__MAX__NO" />
       <TableFilter />
       <Table class="mt-10"
              title="Data"
@@ -21,12 +21,29 @@
 <script>
 
 import TableFilter from "~/components/UI/TableFilter.vue";
-import Form from "~/components/UI/Form.vue";
+import FormModal from "~/components/UI/FormModal.vue";
 import Table from "~/components/UI/Table.vue";
 
 export default {
   name: "index",
-  components: {TableFilter, Form, Table},
+  components: {TableFilter, FormModal, Table},
+  computed: {
+    DATA() {
+      return this.$store.getters["info/FILTERS__MEETS"]
+    },
+    FIELDS() {
+      return this.$store.getters["info/MEETS_FIELDS"]
+    },
+    MEETS_FORM_FIELDS() {
+      return this.$store.getters["info/MEETS_FORM_FIELDS"]
+    },
+    CLIENTS() {
+      return this.$store.getters["info/CLIENTS"]
+    },
+    MEETS__MAX__NO() {
+      return this.$store.getters["info/MEETS__MAX__NO"]
+    }
+  },
   methods: {
     async save(payload) {
       const loadingComponent = this.$buefy.loading.open()
@@ -87,27 +104,13 @@ export default {
           type: 'is-danger',
         })
       } finally {
-        setTimeout(() => {
-          this.$store.dispatch('info/GET__MEETS')
-        }, 100)
         loadingComponent.close()
       }
     }
   },
-  computed: {
-    DATA() {
-      return this.$store.getters["info/FILTERS__MEETS"]
-    },
-    FIELDS() {
-      return this.$store.getters["info/MEETS_FIELDS"]
-    },
-    CLIENTS() {
-      return this.$store.getters["info/CLIENTS"]
-    },
+  async created() {
+    await this.GET_DATA()
   },
-  created() {
-    this.GET_DATA()
-  }
 }
 </script>
 

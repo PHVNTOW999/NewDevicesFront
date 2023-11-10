@@ -5,8 +5,8 @@
       <div v-if="field === 'isActive'" @click="saveBTN()">
         <b-checkbox v-model="pole"
                     type="is-success">
-          <span :class="pole ? 'line-through' : 'no-underline'">
-            {{ pole ? $t("field.isDone") : $t("field.active") }}
+          <span :class="!pole ? 'line-through' : 'no-underline'">
+            {{ !pole ? $t("field.isDone") : $t("field.active") }}
           </span>
         </b-checkbox>
       </div>

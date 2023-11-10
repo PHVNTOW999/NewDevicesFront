@@ -1,5 +1,5 @@
 <template>
-  <div class="table w-full">
+  <div class="table p-5 w-full">
     <div class="table__title">
       <h1 class="m-5 text-4xl text-center">{{ $t(this.title) }}</h1>
     </div>

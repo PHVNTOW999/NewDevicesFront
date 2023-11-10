@@ -1,5 +1,5 @@
 <template>
-  <div class="table__filters">
+  <div class="table__filters p-5">
     <div class="table__filters-title">
       <h1 class="m-5 text-4xl text-center">Фильтр</h1>
     </div>

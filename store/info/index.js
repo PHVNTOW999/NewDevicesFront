@@ -11,6 +11,7 @@ export const state = () => ({
 
   filtersMeets: null,
   meetsFormFields: [
+    { field: 'isActive', label: 'Status'},
     { field: 'no', label: '№', type: 'number'},
     { field: 'client', label: 'Client'},
     { field: 'datetime', label: 'Date - Time'},
@@ -21,9 +22,6 @@ export const state = () => ({
 })
 
 export const getters = {
-  MEETS(state) {
-    return state.meets
-  },
   FILTERS__MEETS(state) {
     return state.filtersMeets
   },
@@ -35,6 +33,10 @@ export const getters = {
   },
   CLIENTS(state) {
     return state.clients
+  },
+  MEETS__MAX__NO(state) {
+    if(state.meets?.length) return state.meets?.reduce((a,b) => a.no > b.no ? a : b).no + 1
+    else return 1
   }
 }
 

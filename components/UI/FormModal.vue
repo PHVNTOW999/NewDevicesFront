@@ -1,5 +1,5 @@
 <template>
-  <div class="Form">
+  <div class="Form pr-5 pl-5">
 
     <div class="mt-8">
       <b-button class="w-full" type="is-success" is-light @click="modalActive = true">{{ $t("add") + $t("header.meets") }}</b-button>
@@ -20,15 +20,14 @@
 
         <section class="modal-card-body">
           <b-field v-for="obj in FIELDS" :label="obj.label">
-<!--            <b-input class="w-full" v-model="form[obj.field]" :type="obj.type" />-->
-            <Field :data="obj.field"
-                   :field="obj.field" />
+            <FormField :field="obj.field" :CLIENTS="CLIENTS" :MaxNO="MaxNO" />
           </b-field>
         </section>
 
         <footer class="modal-card-foot">
           <b-button
-            label="Close" />
+            label="Close"
+            @click="modalActive = false" />
           <b-button
             label="Save"
             type="is-success" />
@@ -41,20 +40,19 @@
 </template>
 
 <script>
-import Field from "~/components/UI/Field.vue";
+import FormField from "~/components/UI/FormField.vue";
 
 export default {
-  name: "Form",
-  components: {Field},
+  name: "FormModal",
+  props: ['FIELDS', 'CLIENTS', 'MaxNO'],
+  components: {FormField},
   data() {
     return {
       modalActive: false,
       form: {
-        isActive: true,
+        isActive: false,
         no: null,
-        name: null,
-        phone: null,
-        datetime: new Date(),
+        datetime: null,
         details: null,
       },
     }
@@ -74,14 +72,6 @@ export default {
         loadingComponent.close()
       }
     },
-  },
-  computed: {
-    MEET_DATA() {
-      return this.$store.getters["info/MEETS"]
-    },
-    FIELDS() {
-      return this.$store.getters["info/MEETS_FORM_FIELDS"]
-    }
   },
   created() {
     this.form.datetime = null

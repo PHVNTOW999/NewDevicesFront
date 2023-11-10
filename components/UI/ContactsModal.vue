@@ -336,7 +336,6 @@ export default {
         }
         if(this.deletedEmails.length) {
           for(let email of this.deletedEmails) {
-            console.log(email)
             await this.$store.dispatch('info/DEL__EMAIL', email)
           }
         }
