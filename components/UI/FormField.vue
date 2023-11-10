@@ -74,19 +74,20 @@ export default {
       pole: null,
     }
   },
-  methods: {
-    submit() {
-      const payload = {}
-      payload['uuid'] = this.uuid
-      payload['field'] = {}
-      payload.field[this.field] = this.pole
-
-      this.$emit('submit', payload)
-    },
+  watch: {
+    pole() {
+      const payload =  {
+        field: this.field,
+        val: this.pole
+      }
+      return this.$emit('returnedValue', payload)
+    }
   },
   created() {
-    if(this.field === "no") this.field === "no" ? this.pole = this.MaxNO : this.pole = null
-    if(this.field === "datetime") this.field === "datetime" ? this.pole = new Date() : this.pole = null
+    setTimeout(() => {
+      if(this.field === "no") this.field === "no" ? this.pole = this.MaxNO : this.pole = null
+      if(this.field === "datetime") this.field === "datetime" ? this.pole = new Date() : this.pole = null
+    }, 100)
   }
 }
 </script>

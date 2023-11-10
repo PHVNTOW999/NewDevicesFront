@@ -4,7 +4,7 @@
       <div class="main__title">
         <h1 class="m-5 text-4xl text-center">{{ $t("header.meets") }}</h1>
       </div>
-      <FormModal :FIELDS="MEETS_FORM_FIELDS" :CLIENTS="CLIENTS" :MaxNO="MEETS__MAX__NO" />
+      <FormModal :FIELDS="MEETS_FORM_FIELDS" :CLIENTS="CLIENTS" :MaxNO="MEETS__MAX__NO" @submitForm="submitForm" />
       <TableFilter />
       <Table class="mt-10"
              title="Data"
@@ -45,6 +45,20 @@ export default {
     }
   },
   methods: {
+    async submitForm(payload) {
+      const loadingComponent = this.$buefy.loading.open()
+      try {
+        await this.$store.dispatch('info/POST__MEET', payload)
+      } catch(e) {
+        this.$buefy.notification.open({
+          message: `Ошибка: ${e}`,
+          type: 'is-danger',
+        })
+      } finally {
+        await this.$store.dispatch('info/GET__MEETS')
+        loadingComponent.close()
+      }
+    },
     async save(payload) {
       const loadingComponent = this.$buefy.loading.open()
       try {

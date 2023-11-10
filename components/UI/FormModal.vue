@@ -20,7 +20,7 @@
 
         <section class="modal-card-body">
           <b-field v-for="obj in FIELDS" :label="obj.label">
-            <FormField :field="obj.field" :CLIENTS="CLIENTS" :MaxNO="MaxNO" />
+            <FormField :field="obj.field" :CLIENTS="CLIENTS" :MaxNO="MaxNO" @returnedValue="returnedValue" />
           </b-field>
         </section>
 
@@ -30,7 +30,8 @@
             @click="modalActive = false" />
           <b-button
             label="Save"
-            type="is-success" />
+            type="is-success"
+            @click="$emit('submitForm', form)"/>
         </footer>
       </div>
     </b-modal>
@@ -51,31 +52,15 @@ export default {
       modalActive: false,
       form: {
         isActive: false,
-        no: null,
-        datetime: null,
-        details: null,
+        no: "",
+        client: "",
+        datetime: "",
+        details: "",
       },
     }
   },
-  methods: {
-    async post() {
-      const loadingComponent = this.$buefy.loading.open()
-      try {
-        await this.$store.dispatch('info/POST__MEET', this.form)
-      } catch(e) {
-        this.$buefy.notification.open({
-          message: `Ошибка: ${e}`,
-          type: 'is-danger',
-        })
-      } finally {
-        this.$router.go(0)
-        loadingComponent.close()
-      }
-    },
-  },
-  created() {
-    this.form.datetime = null
-  }
+  methods: { returnedValue(payload) { this.form[payload.field] = payload.val } },
+  created() { this.form.datetime = null }
 }
 </script>
 
