@@ -18,12 +18,24 @@ export const state = () => ({
     { field: 'details', label: 'Details'},
   ],
 
+  meetsFilterFields: [
+    { field: 'isActive', label: 'Status' },
+    { field: 'no', label: '№', type: 'number' },
+    { field: 'client', label: 'Client' },
+    { field: 'datetime', label: 'Date - Time (from)' },
+    { field: 'datetime_to', label: 'Date - Time (to)' },
+    { field: 'details', label: 'Details' },
+  ],
+
   clients: null
 })
 
 export const getters = {
   FILTERS__MEETS(state) {
     return state.filtersMeets
+  },
+  MEETS_FILTER_FIELDS(state) {
+    return state.meetsFilterFields
   },
   MEETS_FIELDS(state) {
     return state.meetsFields
@@ -56,10 +68,24 @@ export const mutations = {
           const check = res.find((obj) => {
             return obj.uuid == el.uuid
           })
-          if(String(el[key]).includes(val) && !check) res.push(el)
+
+          console.log(el, val)
+
+          if(key === 'datetime') {
+            new Date(el.datetime).toISOString() >= new Date(val).toISOString() && !check ? res.push(el) : null
+          } else if(key === 'datetime_to') {
+            new Date(el.datetime).toISOString() <= new Date(val).toISOString() && !check ? res.push(el) : null
+          } else if(key === 'client') {
+            el.client.uuid == val.uuid && !check ? res.push(el) : null
+          } else {
+            String(el[key]).includes(val) && !check ? res.push(el) : null
+          }
+          // if(String(el[key]).includes(val) && !check) res.push(el)
+
         })
       }
     }
+
     state.filtersMeets = res
   },
   DEL__FILTERS(state) {

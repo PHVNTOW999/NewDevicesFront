@@ -11,12 +11,18 @@
         :bordered="true"
         ref="table">
 
-        <b-table-column v-for="obj in FIELDS" :field="obj.field" :label="obj.label" v-slot="props">
+        <b-table-column
+          v-for="obj in FIELDS"
+          :field="obj.field"
+          :label="obj.label"
+          v-slot="props">
           <Field :data="props.row[obj.field]"
                  :field="obj.field"
                  :contacts="{ 'phones': props.row.phones, 'emails': props.row.emails }"
                  :CLIENTS="CLIENTS"
                  :uuid="props.row.uuid"
+                 @MEETS__DEL__PHONE="MEETS__DEL__PHONE"
+                 @MEETS__DEL__EMAIL="MEETS__DEL__EMAIL"
                  @save="save"
                  @setClient="setClient" />
         </b-table-column>
@@ -45,6 +51,12 @@ export default {
   data() { return { tableKey: 0 } },
   components: {Field},
   methods: {
+    MEETS__DEL__PHONE(payload) {
+      this.$emit('MEETS__DEL__PHONE', payload)
+    },
+    MEETS__DEL__EMAIL(payload) {
+      this.$emit('MEETS__DEL__EMAIL', payload)
+    },
     save(payload) {
       this.$emit('save', payload)
     },

@@ -215,12 +215,12 @@ export default {
     delNewPhone(i) {
       this.newPhones.splice(i, 1)
     },
-    delPhone(i, uuid) {
+    async delPhone(i, uuid) {
       const form = {
         uuid: this.uuid,
         data: i
       }
-      this.$store.commit('info/MEETS__DEL__PHONE', form)
+      await this.$emit('MEETS__DEL__PHONE', form)
       this.deletedPhones.push(uuid)
     },
     addEmail() {
@@ -239,12 +239,12 @@ export default {
     delNewEmail(i) {
       this.newEmails.splice(i, 1)
     },
-    delEmail(i, uuid) {
+    async delEmail(i, uuid) {
       const form = {
         uuid: this.uuid,
         data: i
       }
-      this.$store.commit('info/MEETS__DEL__EMAIL', form)
+      await this.$emit('MEETS__DEL__EMAIL', form)
       this.deletedEmails.push(uuid)
     },
     copyEmail(email) {

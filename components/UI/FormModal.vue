@@ -31,7 +31,7 @@
           <b-button
             label="Save"
             type="is-success"
-            @click="$emit('submitForm', form)"/>
+            @click="$emit('submitForm', form); modalActive = false"/>
         </footer>
       </div>
     </b-modal>

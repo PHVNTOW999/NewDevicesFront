@@ -39,7 +39,10 @@
       </div>
 
       <div class="flex justify-between" v-if="field === 'contacts'">
-        <ContactsModal :uuid="this.uuid" :contacts="this.contacts" />
+        <ContactsModal :uuid="this.uuid"
+                       :contacts="this.contacts"
+                       @MEETS__DEL__PHONE="MEETS__DEL__PHONE"
+                       @MEETS__DEL__EMAIL="MEETS__DEL__EMAIL" />
       </div>
 
       <div class="flex justify-between" v-if="field === 'datetime'" >
@@ -104,6 +107,12 @@ export default {
     }
   },
   methods: {
+    MEETS__DEL__PHONE(payload) {
+      this.$emit('MEETS__DEL__PHONE', payload)
+    },
+    MEETS__DEL__EMAIL(payload) {
+      this.$emit('MEETS__DEL__EMAIL', payload)
+    },
     saveBTNClientBTN() {
       this.$buefy.dialog.confirm({
         message: 'Сохранить изменения?',

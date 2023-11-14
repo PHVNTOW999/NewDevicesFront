@@ -4,8 +4,17 @@
       <div class="main__title">
         <h1 class="m-5 text-4xl text-center">{{ $t("header.meets") }}</h1>
       </div>
-      <FormModal :FIELDS="MEETS_FORM_FIELDS" :CLIENTS="CLIENTS" :MaxNO="MEETS__MAX__NO" @submitForm="submitForm" />
-      <TableFilter />
+      <FormModal
+        :FIELDS="MEETS_FORM_FIELDS"
+        :CLIENTS="CLIENTS"
+        :MaxNO="MEETS__MAX__NO"
+        @submitForm="submitForm" />
+      <TableFilter
+        :FIELDS="MEETS_FILTER_FIELDS"
+        :CLIENTS="CLIENTS"
+        :widthClass="widthClass"
+        @returnedValue="returnedValue"
+        @DEL__FILTERS="DEL__FILTERS" />
       <Table class="mt-10"
              title="Data"
              :DATA="DATA"
@@ -13,6 +22,8 @@
              :CLIENTS="CLIENTS"
               @save="save"
               @setClient="setClient"
+              @MEETS__DEL__PHONE="MEETS__DEL__PHONE"
+              @MEETS__DEL__EMAIL="MEETS__DEL__EMAIL"
               @del="del"/>
     </div>
   </div>
@@ -27,28 +38,32 @@ import Table from "~/components/UI/Table.vue";
 export default {
   name: "index",
   components: {TableFilter, FormModal, Table},
-  computed: {
-    DATA() {
-      return this.$store.getters["info/FILTERS__MEETS"]
-    },
-    FIELDS() {
-      return this.$store.getters["info/MEETS_FIELDS"]
-    },
-    MEETS_FORM_FIELDS() {
-      return this.$store.getters["info/MEETS_FORM_FIELDS"]
-    },
-    CLIENTS() {
-      return this.$store.getters["info/CLIENTS"]
-    },
-    MEETS__MAX__NO() {
-      return this.$store.getters["info/MEETS__MAX__NO"]
-    }
-  },
+  data() { return { windowWidth: window.innerWidth } },
   methods: {
+    MEETS__DEL__PHONE(payload) {
+      this.$store.commit('info/MEETS__DEL__PHONE', payload)
+    },
+    MEETS__DEL__EMAIL(payload) {
+      this.$store.commit('info/MEETS__DEL__EMAIL', payload)
+    },
+    DEL__FILTERS() {
+      this.$store.commit('info/DEL__FILTERS')
+    },
+    returnedValue(payload) {
+      this.$store.commit('info/SET__FILTERS', payload)
+    },
+    // SET__FILTERS(payload) {
+    //   this.$store.commit('info/SET__FILTERS', payload)
+    // },
     async submitForm(payload) {
       const loadingComponent = this.$buefy.loading.open()
       try {
         await this.$store.dispatch('info/POST__MEET', payload)
+
+        this.$buefy.notification.open({
+          message: 'Встречя добавлена',
+          type: 'is-success'
+        })
       } catch(e) {
         this.$buefy.notification.open({
           message: `Ошибка: ${e}`,
@@ -122,8 +137,35 @@ export default {
       }
     }
   },
-  async created() {
+  computed: {
+    DATA() {
+      return this.$store.getters["info/FILTERS__MEETS"]
+    },
+    FIELDS() {
+      return this.$store.getters["info/MEETS_FIELDS"]
+    },
+    MEETS_FORM_FIELDS() {
+      return this.$store.getters["info/MEETS_FORM_FIELDS"]
+    },
+    MEETS_FILTER_FIELDS() {
+      return this.$store.getters["info/MEETS_FILTER_FIELDS"]
+    },
+    CLIENTS() {
+      return this.$store.getters["info/CLIENTS"]
+    },
+    MEETS__MAX__NO() {
+      return this.$store.getters["info/MEETS__MAX__NO"]
+    },
+    widthClass() {
+      if(this.windowWidth > 425) return 'filter grid grid-cols-[0.1fr_0.3fr_1fr_1fr_1fr_1fr_0.01fr]'
+      else return 'filter grid grid-cols-[1fr] text-center'
+    }
+  },
+  async mounted() {
     await this.GET_DATA()
+    window.onresize = () => {
+      this.windowWidth = window.innerWidth
+    }
   },
 }
 </script>

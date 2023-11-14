@@ -3,39 +3,17 @@
     <div class="table__filters-title">
       <h1 class="m-5 text-4xl text-center">Фильтр</h1>
     </div>
-    <div class="filter grid grid-cols-[0.5fr_1fr_1fr_1fr_1fr_1fr_0.1fr]">
+    <div :class="widthClass">
 
-      <b-field label="Статус">
-        <b-checkbox v-model="filters.isActive"
-                    type="is-success">
-          <span>{{ filters.isActive ? $t("field.isDone") : $t("field.active") }}</span>
-        </b-checkbox>
-      </b-field>
-
-      <b-field label="№">
-        <b-input class="w-full" v-model="filters.no" type="number" />
-      </b-field>
-
-      <b-field label="Имя">
-        <b-input class="w-full" v-model="filters.name" />
-      </b-field>
-
-      <b-field label="Телефон">
-        <b-input class="w-full" v-model="filters.phone" />
-      </b-field>
-
-      <b-field label="Дата">
-        <b-input class="w-full" v-model="filters.datetime" />
-      </b-field>
-
-      <b-field label="Детали">
-        <b-input class="w-full" v-model="filters.details" type="details" />
+      <b-field v-for="obj in FIELDS" :label="obj.label">
+        <FilterField :field="obj.field" :CLIENTS="CLIENTS" :clear="clearField" @returnedValue="returnedValue" />
       </b-field>
 
       <b-field class="mt-8">
-        <b-tooltip label="Сбросить" position="is-left">
+        <b-tooltip label="Сбросить" position="is-left" class="w-full">
           <b-button type="is-danger"
                     icon-right="delete"
+                    class="w-full"
                     @click="DEL__FILTERS" />
         </b-tooltip>
       </b-field>
@@ -45,39 +23,46 @@
 </template>
 
 <script>
+import FilterField from "~/components/UI/FilterField.vue";
+
 export default {
   name: "TableFilter",
+  components: {FilterField},
+  props:['FIELDS', 'CLIENTS', 'widthClass'],
   data() {
     return {
-      filters: {
-        isActive: null,
-        no: null,
-        name: null,
-        phone: null,
-        datetime: null,
-        details: null,
-      }
+      filters: {},
+      clearField: null,
     }
   },
   methods: {
+    returnedValue(payload) {
+      this.filters[payload.field] = payload.val
+      this.$emit('returnedValue', this.filters)
+    },
     DEL__FILTERS() {
+      this.clearField += 1
       this.filters = {
         isActive: null,
         no: null,
-        name: null,
-        phone: null,
+        client: null,
         datetime: null,
         details: null,
       }
       setTimeout(() => {
-        this.$store.commit('info/DEL__FILTERS')
+        this.$emit('DEL__FILTERS')
+
+        this.$buefy.notification.open({
+          message: 'Фильтр удалён',
+          type: 'is-success'
+        })
       }, 100)
     }
   },
   watch: {
     filters: {
       handler() {
-        return this.$store.commit('info/SET__FILTERS', this.filters)
+        return this.$emit('returnedValue', this.filters)
       },
       deep: true
     }
