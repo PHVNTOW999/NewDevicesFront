@@ -22,8 +22,8 @@ export const state = () => ({
     { field: 'isActive', label: 'Status' },
     { field: 'no', label: '№', type: 'number' },
     { field: 'client', label: 'Client' },
-    { field: 'datetime', label: 'Date - Time (from)' },
-    { field: 'datetime_to', label: 'Date - Time (to)' },
+    { field: 'datetime', label: 'Date - Time (from - to)' },
+    // { field: 'datetime_to', label: 'Date - Time (to)' },
     { field: 'details', label: 'Details' },
   ],
 
@@ -64,23 +64,27 @@ export const mutations = {
 
     for (const [key, val] of copyFilter) {
       if(val !== null && val !== '') {
+        console.log(copyFilter, val, payload)
         copyArr.forEach(el => {
           const check = res.find((obj) => {
-            return obj.uuid == el.uuid
+            return obj.uuid === el.uuid
           })
 
-          console.log(el, val)
-
           if(key === 'datetime') {
-            new Date(el.datetime).toISOString() >= new Date(val).toISOString() && !check ? res.push(el) : null
-          } else if(key === 'datetime_to') {
-            new Date(el.datetime).toISOString() <= new Date(val).toISOString() && !check ? res.push(el) : null
+            // switch / case
+            if(val.from && val.to) {
+              new Date(el.datetime).toISOString() >= new Date(val.from).toISOString() &&
+              new Date(el.datetime).toISOString() <= new Date(val.to).toISOString() ? res.push(el) : null
+            } else if (val.from) {
+              new Date(el.datetime).toISOString() >= new Date(val.from).toISOString() ? res.push(el) : null
+            } else {
+              new Date(el.datetime).toISOString() <= new Date(val.to).toISOString() ? res.push(el) : null
+            }
           } else if(key === 'client') {
-            el.client.uuid == val.uuid && !check ? res.push(el) : null
+            el.client.uuid === val.uuid ? res.push(el) : null
           } else {
-            String(el[key]).includes(val) && !check ? res.push(el) : null
+            String(el[key]).includes(val) ? res.push(el) : null
           }
-          // if(String(el[key]).includes(val) && !check) res.push(el)
 
         })
       }

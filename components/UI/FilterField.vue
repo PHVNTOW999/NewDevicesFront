@@ -39,7 +39,7 @@
               label="Now"
               type="is-primary"
               icon-left="clock"
-              @click="pole = new Date()" />
+              @click="pole.from = new Date()" />
           </template>
 
           <template #right>
@@ -48,12 +48,10 @@
               type="is-danger"
               icon-left="close"
               outlined
-              @click="pole = null" />
+              @click="pole.from = null" />
           </template>
         </b-datetimepicker>
-      </div>
 
-      <div class="flex justify-between" v-if="field === 'datetime_to'" >
         <b-datetimepicker v-model="pole"
                           class="w-full"
                           placeholder="Click to select...">
@@ -63,7 +61,7 @@
               label="Now"
               type="is-primary"
               icon-left="clock"
-              @click="pole = new Date()" />
+              @click="pole.to = new Date()" />
           </template>
 
           <template #right>
@@ -72,7 +70,7 @@
               type="is-danger"
               icon-left="close"
               outlined
-              @click="pole = null" />
+              @click="pole.to = null" />
           </template>
         </b-datetimepicker>
       </div>
@@ -95,24 +93,33 @@ export default {
   components: { Multiselect },
   data() {
     return {
-      pole: null,
+      pole: null
     }
   },
   watch: {
-    pole() {
-      const payload =  {
-        field: this.field,
-        val: this.pole
-      }
-      return this.$emit('returnedValue', payload)
+    pole: {
+      handler() {
+        const payload =  {
+          field: this.field,
+          val: this.pole
+        }
+        return this.$emit('returnedValue', payload)
+      },
+      deep: true
     },
     clear() { this.pole = null }
   },
-  // created() {
-  //   setTimeout(() => {
-    //   if(this.field == 'isActive') this.pole = true
-    // }, 100)
-  // }
+  created() {
+  //   if(this.field && this.field === 'datetime') {
+  //     this.pole = {
+  //       from: null,
+  //       to: null
+  //     }
+  //   } else {
+  //     this.pole = null
+  //   }
+    this.pole = null
+  }
 }
 </script>
 

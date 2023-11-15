@@ -50,6 +50,7 @@ export default {
       this.$store.commit('info/DEL__FILTERS')
     },
     returnedValue(payload) {
+      // if(payload.field == 'datetime')
       this.$store.commit('info/SET__FILTERS', payload)
     },
     // SET__FILTERS(payload) {
