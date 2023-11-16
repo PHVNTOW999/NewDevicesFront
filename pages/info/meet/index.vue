@@ -46,11 +46,25 @@ export default {
     MEETS__DEL__EMAIL(payload) {
       this.$store.commit('info/MEETS__DEL__EMAIL', payload)
     },
-    DEL__FILTERS() {
-      this.$store.commit('info/DEL__FILTERS')
+    async DEL__FILTERS() {
+      const loadingComponent = this.$buefy.loading.open()
+      try {
+        await this.$store.commit('info/DEL__FILTERS')
+
+        this.$buefy.notification.open({
+          message: 'Фильтр удалён',
+          type: 'is-success'
+        })
+      } catch (e) {
+        this.$buefy.notification.open({
+          message: `Ошибка: ${e}`,
+          type: 'is-danger',
+        })
+      } finally {
+        loadingComponent.close()
+      }
     },
     returnedValue(payload) {
-      // if(payload.field == 'datetime')
       this.$store.commit('info/SET__FILTERS', payload)
     },
     // SET__FILTERS(payload) {
@@ -158,7 +172,7 @@ export default {
       return this.$store.getters["info/MEETS__MAX__NO"]
     },
     widthClass() {
-      if(this.windowWidth > 425) return 'filter grid grid-cols-[0.1fr_0.3fr_1fr_1fr_1fr_1fr_0.01fr]'
+      if(this.windowWidth > 425) return 'filter grid grid-cols-[0.1fr_1fr_1fr_1fr_0.01fr]'
       else return 'filter grid grid-cols-[1fr] text-center'
     }
   },

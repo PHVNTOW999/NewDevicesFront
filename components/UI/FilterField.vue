@@ -30,7 +30,7 @@
       </div>
 
       <div class="flex justify-between" v-if="field === 'datetime'" >
-        <b-datetimepicker v-model="pole"
+        <b-datetimepicker v-model="pole.from"
                           class="w-full"
                           placeholder="Click to select...">
 
@@ -52,7 +52,7 @@
           </template>
         </b-datetimepicker>
 
-        <b-datetimepicker v-model="pole"
+        <b-datetimepicker v-model="pole.to"
                           class="w-full"
                           placeholder="Click to select...">
 
@@ -99,7 +99,7 @@ export default {
   watch: {
     pole: {
       handler() {
-        const payload =  {
+        const payload = {
           field: this.field,
           val: this.pole
         }
@@ -107,19 +107,9 @@ export default {
       },
       deep: true
     },
-    clear() { this.pole = null }
+    clear() { this.field && this.field === 'datetime' ? this.pole = { from: null, to: null } : this.pole = null }
   },
-  created() {
-  //   if(this.field && this.field === 'datetime') {
-  //     this.pole = {
-  //       from: null,
-  //       to: null
-  //     }
-  //   } else {
-  //     this.pole = null
-  //   }
-    this.pole = null
-  }
+  created() { this.field && this.field === 'datetime' ? this.pole = { from: null, to: null } : this.pole = null }
 }
 </script>
 

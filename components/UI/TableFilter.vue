@@ -42,21 +42,8 @@ export default {
     },
     DEL__FILTERS() {
       this.clearField += 1
-      this.filters = {
-        isActive: null,
-        no: null,
-        client: null,
-        datetime: null,
-        details: null,
-      }
-      setTimeout(() => {
-        this.$emit('DEL__FILTERS')
-
-        this.$buefy.notification.open({
-          message: 'Фильтр удалён',
-          type: 'is-success'
-        })
-      }, 100)
+      this.filters = null
+      this.$emit('DEL__FILTERS')
     }
   },
   watch: {
