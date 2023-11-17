@@ -5,8 +5,10 @@
     </div>
     <div :class="widthClass">
 
+<!--      <FilterField :field="FIELDS.datetime" :clear="clearField" @returnedValue="returnedValue" />-->
+
       <b-field v-for="obj in FIELDS" :label="obj.label">
-        <FilterField :field="obj.field" :CLIENTS="CLIENTS" :clear="clearField" @returnedValue="returnedValue" />
+        <FilterField :field="obj.field" :CLIENTS="CLIENTS" :clear="clearField" @returnedValue="returnedValue" :disable="disable" />
       </b-field>
 
       <b-field class="mt-8">
@@ -33,16 +35,18 @@ export default {
     return {
       filters: {},
       clearField: null,
+      disable: true,
     }
   },
   methods: {
     returnedValue(payload) {
       this.filters[payload.field] = payload.val
       this.$emit('returnedValue', this.filters)
+
+      this.disable = !(payload.field === 'datetime' && payload.val.from !== null || payload.val.to !== null);
     },
     DEL__FILTERS() {
       this.clearField += 1
-      this.filters = null
       this.$emit('DEL__FILTERS')
     }
   },

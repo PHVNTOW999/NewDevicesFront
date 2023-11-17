@@ -65,11 +65,10 @@ export default {
       }
     },
     returnedValue(payload) {
-      this.$store.commit('info/SET__FILTERS', payload)
+      if(payload.datetime && payload.datetime.from !== null || payload.datetime.to !== null) {
+        this.$store.commit('info/SET__FILTERS', payload)
+      }
     },
-    // SET__FILTERS(payload) {
-    //   this.$store.commit('info/SET__FILTERS', payload)
-    // },
     async submitForm(payload) {
       const loadingComponent = this.$buefy.loading.open()
       try {

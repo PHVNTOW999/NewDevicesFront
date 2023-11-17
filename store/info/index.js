@@ -60,11 +60,10 @@ export const mutations = {
     state.filtersMeets = payload
   },
   SET__FILTERS(state, payload) {
-    const copyFilter = Object.entries(payload)
     const copyArr = state.meets
     let res = []
 
-    if(copyArr && copyFilter) {
+    if(copyArr && state.filtersMeets.length) {
       copyArr.filter((obj) => {
 
         const check = res.find((el) => {
@@ -82,57 +81,37 @@ export const mutations = {
           }
         }
 
-        if(payload.isActive) {
-          if(res.length) {
-            res.forEach((obj) => {
-              if(payload.isActive === true) console.log(obj.isActive, payload.isActive)
-              else console.log(obj.isActive, payload.isActive)
+        if(res.length) {
+          if(payload.isActive !== null && payload.isActive !== undefined) {
+            if(res.length) {
+              res.forEach((obj, i) => {
+                if(obj.isActive !== payload.isActive) res.splice(i, 1)
+              })
+            }
+          }
+          if(payload.client && !check) {
+            if(res.length) {
+              res.forEach((obj, i) => {
+                if(obj.client.uuid !== payload.client.uuid) {
+                  res.splice(i, 1)
+                  res.push(obj)
+                }
+              })
+            }
+          }
+          if(payload.details && !check) {
+            res.forEach((obj, i) => {
+              if(obj.details.includes(payload.details)) {
+                res.splice(i, 1)
+                res.unshift(obj)
+              }
             })
           }
         }
-
       })
     }
 
     state.filtersMeets = res
-
-    // if(copyArr && copyFilter) {
-    //   for (const [key, val] of copyFilter) {
-    //     copyArr.forEach(el => {
-    //       const check = res.find((obj) => {
-    //         return obj.uuid === el.uuid
-    //       })
-    //
-    //       if(key === 'datetime' && val.to || val.from) {
-    //         // switch / case
-    //         if(val.from && val.to && !check) {
-    //           new Date(el.datetime).toISOString() >= new Date(val.from).toISOString() &&
-    //           new Date(el.datetime).toISOString() <= new Date(val.to).toISOString() ? res.push(el) : null
-    //         } else if (val.from && !check) {
-    //           new Date(el.datetime).toISOString() >= new Date(val.from).toISOString() ? res.push(el) : res.forEach((obj, i) => {
-    //             new Date(el.datetime).toISOString() >= new Date(val.from).toISOString() ? res.splice(i, 1) : null
-    //           })
-    //         } else {
-    //           new Date(el.datetime).toISOString() <= new Date(val.to).toISOString() ? res.push(el) : res.forEach((obj, i) => {
-    //             new Date(el.datetime).toISOString() <= new Date(val.to).toISOString() ? res.splice(i, 1) : null
-    //           })
-    //         }
-    //       } else if(key === 'isActive' && val !== null && !check) {
-    //         console.log('gg')
-    //         el.isActive === val ? res.push(el) : res.forEach((obj, i) => {
-    //           obj.isActive !== val ? res.splice(i, 1) : null
-    //         })
-    //       } else if(key === 'client' && val && !check) {
-    //         el.client.uuid === val.uuid ? res.unshift(el) : null
-    //       }
-    //       // else {
-    //       //   String(el[key]).includes(val) && !check ? res.push(el) : null
-    //       // }
-    //     })
-    //   }
-    // }
-
-    // state.filtersMeets = res
   },
   DEL__FILTERS(state) {
     state.filtersMeets = state.meets

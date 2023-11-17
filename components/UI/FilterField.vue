@@ -4,6 +4,7 @@
 
       <div v-if="field === 'isActive'">
         <b-checkbox v-model="pole"
+                    :disabled="this.disable"
                     type="is-success">
           <span :class="!pole ? 'line-through' : 'no-underline'">
             {{ !pole ? $t("field.isDone") : $t("field.active") }}
@@ -12,16 +13,16 @@
       </div>
 
       <div class="flex justify-between" v-if="field === 'no'">
-        <b-input class="w-full" v-model="pole" type="number" />
+        <b-input class="w-full" v-model="pole" type="number" :disabled="this.disable" />
       </div>
 
       <div class="flex justify-between" v-if="field === 'name'">
-        <b-input class="w-full" v-model="pole" />
+        <b-input class="w-full" v-model="pole" :disabled="this.disable" />
       </div>
 
       <div class="flex justify-between" v-if="field === 'client'">
         <div v-if="CLIENTS" class="w-full">
-          <multiselect v-model="pole" :options="CLIENTS" track-by="name" label="name" :allow-empty="false">
+          <multiselect v-model="pole" :options="CLIENTS" track-by="name" label="name" :disabled="this.disable">
             <template slot="singleLabel" slot-scope="{ option }">
               <strong>{{ option.name }}</strong>
             </template>
@@ -76,7 +77,7 @@
       </div>
 
       <div class="flex justify-between" v-if="field === 'details'">
-        <b-input class="w-full" v-model="pole" type="text" />
+        <b-input class="w-full" v-model="pole" type="text" :disabled="this.disable" />
       </div>
 
     </b-field>
@@ -89,7 +90,7 @@ import field from "~/components/UI/Field.vue";
 
 export default {
   name: "FormField",
-  props: ['field', 'CLIENTS', 'clear'],
+  props: ['field', 'CLIENTS', 'clear', 'disable'],
   components: { Multiselect },
   data() {
     return {
