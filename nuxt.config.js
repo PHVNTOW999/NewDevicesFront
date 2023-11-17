@@ -1,7 +1,7 @@
 // Local api
-const api = 'http://127.0.0.1:8000/'
+// const api = 'http://127.0.0.1:8000/'
 // Server api
-// const api = 'http://188.94.156.116:10000/'
+const api = 'http://195.80.238.204:4000/'
 
 export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
