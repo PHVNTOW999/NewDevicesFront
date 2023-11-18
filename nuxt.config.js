@@ -1,5 +1,6 @@
 // Local api
 // const api = 'http://127.0.0.1:8000/'
+
 // Server api
 const api = 'http://195.80.238.204:4000/'
 
@@ -48,7 +49,7 @@ export default {
   i18n: {
     lazy: true,
     legacy: false,
-    langDir: "locales",
+    langDir: "./locales/",
     strategy: "prefix_except_default",
     locales: [
       {
@@ -62,7 +63,6 @@ export default {
         file: 'ru.json'
       }
     ]
-    // defaultLocale: 'en'
   },
 
   axios: {
